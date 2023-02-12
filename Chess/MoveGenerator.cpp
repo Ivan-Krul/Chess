@@ -65,18 +65,34 @@ namespace chess_lib
 		auto moves = std::vector<Move>();
 		auto prev_move = board.GetPreviousMove();
 
-		auto constr = [=](int ind) { return Move{ position, ind }; };
+		auto constr = [=](int ind) { return Move{ position, uint8_t(ind) }; };
 		auto pos_upper = [=]() {return is_white_move ? -8 : 8; };
 		auto pos_double_move = [=]() {return is_white_move ? -16 : 16; };
 		auto no_pawn_upper = [=]() { return arr[pos_upper() + position].side == SideType::none; };
-		auto no_pawn_double_upper = [=]() { return no_pawn_upper() && arr[pos_double_move() + position].side == SideType::none && position / 8 == (is_white_move ? 1 : 6); };
+		auto no_pawn_double_upper = [=]() { return no_pawn_upper() && arr[pos_double_move() + position].side == SideType::none && position / 8 == (is_white_move ? 6 : 1); };
+		auto opposite_side = [=]() { return is_white_move ? SideType::black : SideType::white; };
+		auto hit_condition_r = [=]() { return arr[position + pos_upper() + 1].side == opposite_side() && position % 8 != 7; };
+		auto hit_condition_l = [=]() { return arr[position + pos_upper() - 1].side == opposite_side() && position % 8 != 0; };
+		auto en_passant_condition_pos_r = [=]() {
+			return position / 8 == (is_white_move ? 4 : 5) && arr[position + 1].side == opposite_side();
+		};
+		auto en_passant_condition_pos_l = [=]() {
+			return position / 8 == (is_white_move ? 4 : 5) && arr[position - 1].side == opposite_side();
+		};
+		auto en_passant_condition_move = [=]() { return prev_move->GetP1() / 8 == (is_white_move ? 1 : 6) && prev_move->GetP2() / 8 == (is_white_move ? 4 : 5); };
 
 		if (no_pawn_upper())
 			moves.push_back(constr(pos_upper() + position));
 		if (no_pawn_double_upper())
 			moves.push_back(constr(pos_double_move() + position));
-		
-
+		if (hit_condition_r())
+			moves.push_back(constr(pos_upper() + position + 1));
+		if (hit_condition_l())
+			moves.push_back(constr(pos_upper() + position - 1));
+		if (en_passant_condition_pos_r() && en_passant_condition_move())
+			moves.push_back(constr(pos_upper() + position + 1));
+		else if(en_passant_condition_pos_l() && en_passant_condition_move())
+			moves.push_back(constr(pos_upper() + position - 1));
 
 		return moves;
 	}
