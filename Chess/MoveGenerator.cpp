@@ -63,38 +63,20 @@ namespace chess_lib
 		auto is_white_move = !board.GetIsWhiteMove();
 		auto arr = board.GetBoard();
 		auto moves = std::vector<Move>();
+		auto prev_move = board.GetPreviousMove();
 
-		if (is_white_move)
-		{
-			//Move
-			if (arr[position - 8].side == SideType::none) {
-				moves.push_back(Move{ position, position - 8 });
-				if (position / 8 == 7 && arr[position - 16].side == SideType::none)
-					moves.push_back(Move{ position, position - 16 });
-			}
-			//Attack
-			if((bool)((int)arr[position - 8 + 1].side-1) == is_white_move)
-				moves.push_back(Move{ position, position - 8 + 1 });
-			if ((bool)((int)arr[position - 8 - 1].side - 1) == is_white_move)
-				moves.push_back(Move{ position, position - 8 - 1 });
-		}
+		auto constr = [=](int ind) { return Move{ position, ind }; };
+		auto pos_upper = [=]() {return is_white_move ? -8 : 8; };
+		auto pos_double_move = [=]() {return is_white_move ? -16 : 16; };
+		auto no_pawn_upper = [=]() { return arr[pos_upper() + position].side == SideType::none; };
+		auto no_pawn_double_upper = [=]() { return no_pawn_upper() && arr[pos_double_move() + position].side == SideType::none && position / 8 == (is_white_move ? 1 : 6); };
 
-		if (!is_white_move)
-		{
-			//Move
-			if (arr[position + 8].side == SideType::none) {
-				moves.push_back(Move{ position, position + 8 });
-				if (position / 8 == 1 && arr[position + 16].side == SideType::none)
-					moves.push_back(Move{ position, position + 16 });
-			}
-			//Attack
-			if ((bool)((int)arr[position + 8 + 1].side - 1) == is_white_move)
-				moves.push_back(Move{ position, position + 8 + 1 });
-			if ((bool)((int)arr[position + 8 - 1].side - 1) == is_white_move)
-				moves.push_back(Move{ position, position + 8 - 1 });
-		}
+		if (no_pawn_upper())
+			moves.push_back(constr(pos_upper() + position));
+		if (no_pawn_double_upper())
+			moves.push_back(constr(pos_double_move() + position));
+		
 
-		//En Passant
 
 		return moves;
 	}

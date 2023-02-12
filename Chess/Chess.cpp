@@ -107,7 +107,7 @@ int main(int argc, char const* argv[])
 			
 		}
 		std::cout << '\n';
-		std::cout << "Is check: " << (mg.CanKingBeInCheck(board)?"true":"false") << '\n';
+		std::cout << "Is check: " << mg.GeneratePawnMove(board,board.ConvertToIndex("B4")).size() << '\n';
 		std::cout << "Move piece in coord(x,y): ";
 		std::cin >> mstring;
 		if (mstring == "resign")
