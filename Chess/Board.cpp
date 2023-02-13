@@ -62,6 +62,16 @@ namespace chess_lib
 			return 0xff;
 	}
 
+	const std::string Board::ConvertFromIndex(uint8_t index) const
+	{
+		auto x = index % 8;
+		auto y = index / 8;
+		auto str = std::string("  ");
+		str[0] = 'A' + x;
+		str[1] = '1' + (7 - y);
+		return str;
+	}
+
 	const std::vector<Move> Board::GenerateMoveForTile(const uint8_t position) const
 	{
 		auto moves = std::vector<Move>();

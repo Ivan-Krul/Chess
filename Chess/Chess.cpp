@@ -67,6 +67,7 @@ int main(int argc, char const* argv[])
 	auto i = 0;
 	auto mstring = std::string();
 	auto m1 = 0;
+	const auto target = std::string("B5");
 	chess_lib::MoveGenerator mg;
 	while (true)
 	{
@@ -107,7 +108,12 @@ int main(int argc, char const* argv[])
 			
 		}
 		std::cout << '\n';
-		std::cout << "B4.size(): " << mg.GeneratePawnMove(board,board.ConvertToIndex("B4")).size() << '\n';
+		std::cout << target<<" pawn moves:\n";
+		for (auto i : mg.GeneratePawnMove(board, board.ConvertToIndex(target)))
+			std::cout << "\t"<<board.ConvertFromIndex(i.GetP2())<<"\n";
+		
+		std::cout << '\n';
+
 		std::cout << "Move piece in coord(x,y): ";
 		std::cin >> mstring;
 		if (mstring == "resign")
