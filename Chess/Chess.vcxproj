@@ -138,6 +138,7 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Chess.cpp" />
     <ClCompile Include="MoveGenerator.cpp" />
+    <ClCompile Include="MovePusher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetworkLib\NetworkLib.vcxproj">
@@ -147,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="MoveGenerator.h" />
+    <ClInclude Include="MovePusher.h" />
     <ClInclude Include="Tile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

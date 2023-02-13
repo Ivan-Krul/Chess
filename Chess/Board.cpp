@@ -72,29 +72,11 @@ namespace chess_lib
 		return str;
 	}
 
-	const std::vector<Move> Board::GenerateMoveForTile(const uint8_t position) const
+	const void Board::ForcedMove(const Move move)
 	{
-		auto moves = std::vector<Move>();
-
-		return moves;
-	}
-
-	bool Board::MovePiece(const Move move)
-	{
-		if (!(move.GetP1() < 64 && move.GetP2() < 64))
-			return false;
-		if (m_Board[move.GetP1()].side != SideType::white && m_IsWhiteMove)
-			return false;
-		if (m_Board[move.GetP1()].side != SideType::black && !m_IsWhiteMove)
-			return false;
-		if (m_Board[move.GetP1()].side == SideType::none)
-			return false;
-		if (move.GetP1() == move.GetP2())
-			return false;
 		m_PreviousMove = std::make_shared<Move>(move);
 		m_Board[move.GetP2()] = m_Board[move.GetP1()];
 		m_Board[move.GetP1()] = { PieceType::none, SideType::none };
 		m_IsWhiteMove = !m_IsWhiteMove;
-		return true;
 	}
 }

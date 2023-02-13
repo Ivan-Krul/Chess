@@ -3,8 +3,7 @@
 #include "Socket.h"
 #include "Socket.cpp"
 
-#include "MoveGenerator.h"
-#include "Board.h"
+#include "MovePusher.h"
 
 int main(int argc, char const* argv[])
 {
@@ -65,10 +64,10 @@ int main(int argc, char const* argv[])
 	auto board = chess_lib::Board();
 	auto arr = board.GetBoard();
 	auto i = 0;
-	auto mstring = std::string();
-	auto m1 = 0;
-	const auto target = std::string("B5");
-	chess_lib::MoveGenerator mg;
+	auto m1 = std::string();
+	auto m2 = std::string();
+	auto p = chess_lib::MovePusher();
+
 	while (true)
 	{
 		for(uint8_t i = 0; i < 64; i++)
@@ -108,22 +107,16 @@ int main(int argc, char const* argv[])
 			
 		}
 		std::cout << '\n';
-		std::cout << target<<" pawn moves:\n";
-		for (auto i : mg.GeneratePawnMove(board, board.ConvertToIndex(target)))
-			std::cout << "\t"<<board.ConvertFromIndex(i.GetP2())<<"\n";
-		
-		std::cout << '\n';
+		std::cout << "Move a piece in: ";
+		std::cin >> m1;
+		std::cout << "Move a piece to: ";
+		std::cin >> m2;
 
-		std::cout << "Move piece in coord(x,y): ";
-		std::cin >> mstring;
-		if (mstring == "resign")
-			break;
-		m1 = board.ConvertToIndex(mstring);
-		std::cout << "Move piece to coord(x,y): ";
-		std::cin >> mstring;
-		if (!board.MovePiece(chess_lib::Move(m1, board.ConvertToIndex(mstring))))
+		if (!p.MovePiece(board, chess_lib::Move{ board.ConvertToIndex(m1), board.ConvertToIndex(m2) }))
 			std::cout << "no move\n";
+		
 		arr = board.GetBoard();
+
 		std::cout << '\n';
 	}
 

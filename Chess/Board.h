@@ -22,7 +22,6 @@ namespace chess_lib
 		const uint8_t ConvertToIndex(std::string position) const;
 		const std::string ConvertFromIndex(uint8_t index) const;
 
-		const std::vector<Move> GenerateMoveForTile(const uint8_t position) const;
-		bool MovePiece(const Move move);
+		const void ForcedMove(const Move move);
 	};
 }
