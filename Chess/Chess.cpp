@@ -67,6 +67,7 @@ int main(int argc, char const* argv[])
 	auto m1 = std::string();
 	auto m2 = std::string();
 	auto p = chess_lib::MovePusher();
+	auto mg = chess_lib::MoveGenerator(&board);
 
 	while (true)
 	{
@@ -107,6 +108,7 @@ int main(int argc, char const* argv[])
 			
 		}
 		std::cout << '\n';
+		std::cout << "Check: " << (mg.CanKingBeInCheck(!board.GetIsWhiteMove())) << '\n';
 		std::cout << "Move a piece in: ";
 		std::cin >> m1;
 		std::cout << "Move a piece to: ";

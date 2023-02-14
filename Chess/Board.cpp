@@ -44,6 +44,11 @@ namespace chess_lib
 		return m_IsWhiteMove;
 	}
 
+	const char Board::GetCastlingState() const
+	{
+		return *(reinterpret_cast<const char*>(&m_CastlingState));
+	}
+
 	const uint8_t Board::ConvertToIndex(std::string position) const
 	{
 		if (position.size() < 2)
@@ -74,6 +79,36 @@ namespace chess_lib
 
 	const void Board::ForcedMove(const Move move)
 	{
+		if (m_Board[move.GetP1()].type == PieceType::king)
+		{
+			if (move.GetP1() / 8 == 0)
+			{
+				m_CastlingState.bk = 0;
+				m_CastlingState.bq = 0;
+			}
+			else
+			{
+				m_CastlingState.wk = 0;
+				m_CastlingState.wq = 0;
+			}
+		}
+		if (m_Board[move.GetP1()].type == PieceType::rook)
+		{
+			if (move.GetP1() / 8 == 0)
+			{
+				if (move.GetP1() % 8 == 0)
+					m_CastlingState.bq = 0;
+				else
+					m_CastlingState.bk = 0;
+			}
+			else
+			{
+				if (move.GetP1() % 8 == 0)
+					m_CastlingState.wq = 0;
+				else
+					m_CastlingState.wk = 0;
+			}
+		}
 		m_PreviousMove = std::make_shared<Move>(move);
 		m_Board[move.GetP2()] = m_Board[move.GetP1()];
 		m_Board[move.GetP1()] = { PieceType::none, SideType::none };

@@ -18,11 +18,17 @@ namespace chess_lib
 		if (move.GetP1() == move.GetP2())
 			return false;
 
+		auto cpy = board;
+		auto cur_in_check = false;
 		{
-			auto cpy = board;
+			auto mg = MoveGenerator(&board);
+			cur_in_check = mg.CanKingBeInCheck(!is_white_turn);
+		}
+		if(cur_in_check)
+		{
 			cpy.ForcedMove(move);
 			auto mg = MoveGenerator(&cpy);
-			if (mg.CanKingBeInCheck(!board.GetIsWhiteMove()))
+			if (mg.CanKingBeInCheck(!is_white_turn) && cur_in_check)
 				return false;
 		}
 
