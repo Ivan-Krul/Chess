@@ -32,6 +32,7 @@ namespace chess_lib
 		const uint8_t ConvertToIndex(std::string position) const;
 		const std::string ConvertFromIndex(uint8_t index) const;
 
-		const void ForcedMove(const Move move);
+		void ForcedMove(const Move move, bool need_accept = true);
+		void AcceptMove();
 	};
 }

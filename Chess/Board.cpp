@@ -79,7 +79,7 @@ namespace chess_lib
 		return str;
 	}
 
-	const void Board::ForcedMove(const Move move)
+	void Board::ForcedMove(const Move move, bool need_accept)
 	{
 		if (m_Board[move.GetP1()].type == PieceType::king)
 		{
@@ -114,6 +114,11 @@ namespace chess_lib
 		m_PreviousMove = std::make_shared<Move>(move);
 		m_Board[move.GetP2()] = m_Board[move.GetP1()];
 		m_Board[move.GetP1()] = { PieceType::none, SideType::none };
+		if(need_accept)
+			m_IsWhiteMove = !m_IsWhiteMove;
+	}
+	void Board::AcceptMove()
+	{
 		m_IsWhiteMove = !m_IsWhiteMove;
 	}
 }

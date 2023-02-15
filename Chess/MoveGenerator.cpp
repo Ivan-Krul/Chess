@@ -169,6 +169,8 @@ namespace chess_lib
 				auto mg = MoveGenerator(&cpy);
 				if (!mg.CanKingBeInCheck(is_white_turn))
 					points++;
+				if (abs(x + (t == 0 ? 1 : -1)) == 3)
+					break;
 			}
 			for (int8_t f = (t == 0 ? 1 : -1); abs(f) < 3 + t; f += (t == 0 ? 1 : -1))
 				points += (m_pBoard->GetBoard()[get_king_pos + f].side == SideType::none);
