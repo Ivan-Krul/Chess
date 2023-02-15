@@ -44,9 +44,9 @@ namespace chess_lib
 		return m_IsWhiteMove;
 	}
 
-	const char Board::GetCastlingState() const
+	const Board::caslstate Board::GetCastlingState() const
 	{
-		return *(reinterpret_cast<const char*>(&m_CastlingState));
+		return m_CastlingState;
 	}
 
 	const uint8_t Board::ConvertToIndex(std::string position) const

@@ -23,7 +23,7 @@ namespace chess_lib
 		std::vector<Move> GenerateKingMove(const uint8_t position, bool only_enemy = false) const;
 		std::vector<Move> GeneratePawnMove(const uint8_t position, bool only_enemy = false) const;
 
-		bool CanBeCastling(const bool is_white_turn) const;
+		std::vector<Move> GenerateCastlings(const bool is_white_turn) const;
 
 		bool CanKingBeInCheck(const bool is_white_turn) const;
 	};
