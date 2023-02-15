@@ -25,7 +25,7 @@ namespace chess_lib
 		auto dx = abs(m_pMove->GetP2() - m_pMove->GetP1()) - 8;
 		auto cleaner = Move{ m_pMove->GetP2(), uint8_t(m_pMove->GetP1() - dx) };
 		
-		m_pBoard->ForcedMove(cleaner);
+		m_pBoard->ForcedMove(cleaner,false);
 		m_pBoard->ForcedMove(*m_pMove);
 
 		return true;
@@ -42,7 +42,6 @@ namespace chess_lib
 			return false;
 		for (auto& move : moves)
 		{
-			printf("D: ask for coord from %s to %s\n", m_pBoard->ConvertFromIndex(move.GetP1()).c_str(), m_pBoard->ConvertFromIndex(move.GetP2()).c_str());
 			if (!(move.GetP1() == m_pMove->GetP1() && move.GetP2() == m_pMove->GetP2()))
 				continue;
 			// Castling
@@ -50,8 +49,7 @@ namespace chess_lib
 			auto rx = dx > 0 ? 0 : 7;
 			auto y = move.GetP1() / 8;
 			auto rmove = Move{ uint8_t(rx + y * 8), uint8_t(move.GetP1() - dx / 2) };
-			printf("D: rook coord from %s to %s\n", m_pBoard->ConvertFromIndex(rmove.GetP1()).c_str(), m_pBoard->ConvertFromIndex(rmove.GetP2()).c_str());
-			
+
 			m_pBoard->ForcedMove(rmove, false);
 			m_pBoard->ForcedMove(*m_pMove);
 			return true;
@@ -60,7 +58,7 @@ namespace chess_lib
 		return false;
 	}
 
-	const bool MovePusher::MovePiece(Board& board, Move move)
+	const bool MovePusher::MovePiece(Board& board, Move move, Board::PromotionChoice prom)
 	{
 		m_pBoard = &board;
 		m_pMove = std::make_shared<Move>(move);
@@ -96,7 +94,13 @@ namespace chess_lib
 			return true;
 		else if (f_CastlingMove())
 			return true;
+		else if (board.NeedPromotion())
+		{
+			board.ChoosePromotion(prom);
+			return true;
+		}
 		// else
+		
 		board.ForcedMove(move);
 		return true;
 	}

@@ -11,6 +11,6 @@ namespace chess_lib
 		bool f_EnPassantMove();
 		bool f_CastlingMove();
 	public:
-		const bool MovePiece(Board& board, Move move);
+		const bool MovePiece(Board& board, Move move, Board::PromotionChoice prom = Board::PromotionChoice::none);
 	};
 }
