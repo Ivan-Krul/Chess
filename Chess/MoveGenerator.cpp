@@ -131,16 +131,16 @@ namespace chess_lib
 
 	std::vector<Move> MoveGenerator::GenerateCastlings(const bool is_white_turn) const
 	{
-		if(!CanKingBeInCheck(is_white_turn))
+		if(CanKingBeInCheck(is_white_turn))
 			return std::vector<Move>();
 
 		auto caslstates = m_pBoard->GetCastlingState();
 		auto moves = std::vector<Move>();
 		auto state = false;
 		auto points = 0;
-		auto x = uint8_t(0);
+		auto x = int8_t(0);
 
-		auto get_king_pos = [=]() {return uint8_t(is_white_turn ? 60 : 4); };
+		auto get_king_pos =  uint8_t(is_white_turn ? 60 : 4);
 
 		for (uint8_t t = 0; t != 2; t++)
 		{
@@ -160,21 +160,20 @@ namespace chess_lib
 			}
 			if (!state)
 				continue;
-			for (x; abs(x) < 2; x += (t == 0 ? 1 : -1))
+			points = 0;
+			for (x = (t == 0 ? 1 : -1); abs(x) < 3; x += (t == 0 ? 1 : -1))
 			{
-				points = 0;
+				
 				auto cpy = *m_pBoard;
-				cpy.ForcedMove(Move{ get_king_pos(),get_king_pos() + x });
+				cpy.ForcedMove(Move{ get_king_pos, uint8_t(get_king_pos + x) });
 				auto mg = MoveGenerator(&cpy);
 				if (!mg.CanKingBeInCheck(is_white_turn))
 					points++;
 			}
-			for (uint8_t f = 0; abs(f) < 3 + t; f += (t == 0 ? 1 : -1))
-			{
-				points += m_pBoard->GetBoard()[get_king_pos() + f].side == SideType::none;
-			}
-			if (points == 5 + t)
-				moves.push_back(Move{ get_king_pos(), get_king_pos() + x });
+			for (int8_t f = (t == 0 ? 1 : -1); abs(f) < 3 + t; f += (t == 0 ? 1 : -1))
+				points += (m_pBoard->GetBoard()[get_king_pos + f].side == SideType::none);
+			if (points == 4 + t)
+				moves.push_back(Move{ get_king_pos, uint8_t(get_king_pos + x) });
 		}
 
 		return moves;

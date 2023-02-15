@@ -11,7 +11,7 @@ namespace chess_lib
 
 		if (arr[m_pMove->GetP1()].type != PieceType::pawn)
 			return false;
-		else if (arr[m_pMove->GetP2() + front].side != (is_white_turn ? SideType::black : SideType::black))
+		else if (arr[m_pMove->GetP2() - front].side != (is_white_turn ? SideType::black : SideType::black))
 			return false;
 		else if (abs(abs(m_pMove->GetP2() - m_pMove->GetP1()) - 8) != 1)
 			return false;
@@ -23,7 +23,7 @@ namespace chess_lib
 			return false;
 
 		auto dx = abs(m_pMove->GetP2() - m_pMove->GetP1()) - 8;
-		auto cleaner = Move{ m_pMove->GetP2(), m_pMove->GetP1() + dx };
+		auto cleaner = Move{ m_pMove->GetP2(), uint8_t(m_pMove->GetP1() - dx) };
 		
 		m_pBoard->ForcedMove(cleaner);
 		m_pBoard->ForcedMove(*m_pMove);
@@ -53,7 +53,7 @@ namespace chess_lib
 
 	const bool MovePusher::MovePiece(Board& board, Move move)
 	{
-		*m_pBoard = board;
+		m_pBoard = &board;
 		m_pMove = std::make_shared<Move>(move);
 		auto& arr = board.GetBoard();
 		auto is_white_turn = board.GetIsWhiteMove();

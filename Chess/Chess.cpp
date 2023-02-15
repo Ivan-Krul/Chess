@@ -109,6 +109,7 @@ int main(int argc, char const* argv[])
 		}
 		std::cout << '\n';
 		std::cout << "Check: " << (mg.CanKingBeInCheck(!board.GetIsWhiteMove())) << '\n';
+		std::cout << "Castling?: " << mg.GenerateCastlings(board.GetIsWhiteMove()).size() << '\n';
 		std::cout << "Move a piece in: ";
 		std::cin >> m1;
 		std::cout << "Move a piece to: ";
