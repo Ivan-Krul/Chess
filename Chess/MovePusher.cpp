@@ -67,13 +67,13 @@ namespace chess_lib
 
 		if (!(move.GetP1() < 64 && move.GetP2() < 64))
 			return false;
-		if (arr[move.GetP1()].side != SideType::white && is_white_turn)
+		if (arr[move.GetP1()].side != SideType::white && is_white_turn && !board.NeedPromotion())
 			return false;
-		if (arr[move.GetP1()].side != SideType::black && !is_white_turn)
+		if (arr[move.GetP1()].side != SideType::black && !is_white_turn && !board.NeedPromotion())
 			return false;
-		if (arr[move.GetP1()].side == SideType::none)
+		if (arr[move.GetP1()].side == SideType::none && !board.NeedPromotion())
 			return false;
-		if (move.GetP1() == move.GetP2())
+		if (move.GetP1() == move.GetP2() && !board.NeedPromotion())
 			return false;
 
 		auto cpy = board;

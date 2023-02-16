@@ -110,6 +110,7 @@ int main(int argc, char const* argv[])
 		std::cout << '\n';
 		std::cout << "Check: " << (mg.CanKingBeInCheck(!board.GetIsWhiteMove())) << '\n';
 		std::cout << "Castling?: " << mg.GenerateCastlings(board.GetIsWhiteMove()).size() << '\n';
+		
 		std::cout << "Move a piece in: ";
 		std::cin >> m1;
 		std::cout << "Move a piece to: ";
@@ -117,8 +118,26 @@ int main(int argc, char const* argv[])
 
 		if (!p.MovePiece(board, chess_lib::Move{ board.ConvertToIndex(m1), board.ConvertToIndex(m2) }))
 			std::cout << "no move\n";
-		
-		arr = board.GetBoard();
+
+		if (board.NeedPromotion())
+		{
+			std::string s;
+		ty_again:
+			std::cout << "Choose a promotion piece in " << board.ConvertFromIndex(board.GetPreviousMove()->GetP2()) << ": ";
+			std::cin >> s;
+			if (s == "queen")
+				p.MovePiece(board, chess_lib::Move{ board.ConvertToIndex(m1), board.ConvertToIndex(m2) }, chess_lib::Board::PromotionChoice::queen);
+			else if (s == "bishop")
+				p.MovePiece(board, chess_lib::Move{ board.ConvertToIndex(m1), board.ConvertToIndex(m2) }, chess_lib::Board::PromotionChoice::bishop);
+			else if (s == "knight")
+				p.MovePiece(board, chess_lib::Move{ board.ConvertToIndex(m1), board.ConvertToIndex(m2) }, chess_lib::Board::PromotionChoice::knight);
+			else if (s == "rook")
+				p.MovePiece(board, chess_lib::Move{ board.ConvertToIndex(m1), board.ConvertToIndex(m2) }, chess_lib::Board::PromotionChoice::rook);
+			else
+				goto ty_again;
+		}
+
+		arr = board.GetBoard();		
 
 		std::cout << '\n';
 	}
