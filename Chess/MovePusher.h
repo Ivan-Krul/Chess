@@ -10,7 +10,18 @@ namespace chess_lib
 
 		bool f_EnPassantMove();
 		bool f_CastlingMove();
+
+		// Singleton pattern
+		static MovePusher s_Instance;
+		MovePusher() = default;
+
 	public:
 		const bool MovePiece(Board& board, Move move, Board::PromotionChoice prom = Board::PromotionChoice::none);
+
+		// Singleton pattern
+		static MovePusher& GetInstance()
+		{
+			return s_Instance;
+		}
 	};
 }

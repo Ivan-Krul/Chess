@@ -43,5 +43,11 @@ namespace chess_lib
 			return P2;
 		}
 	};
+
+	struct pos
+	{
+		int8_t x : 4;
+		int8_t y : 4;
+	};
 }
 

@@ -126,7 +126,7 @@ namespace chess_lib
 		if(need_accept && !NeedPromotion())
 			m_IsWhiteMove = !m_IsWhiteMove;
 	}
-	bool Board::NeedPromotion()
+	bool Board::NeedPromotion() const
 	{
 		for (uint8_t y = 0; y < 8; y += 7)
 			for (uint8_t x = 0; x < 8; x++)

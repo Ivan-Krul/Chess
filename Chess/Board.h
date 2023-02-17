@@ -45,7 +45,7 @@ namespace chess_lib
 
 		void ForcedMove(const Move move, bool need_accept = true);
 
-		bool NeedPromotion();
+		bool NeedPromotion() const;
 		void ChoosePromotion(PromotionChoice type);
 	};
 }

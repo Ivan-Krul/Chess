@@ -3,7 +3,7 @@
 #include "Socket.h"
 #include "Socket.cpp"
 
-#include "MovePusher.h"
+#include "MoveController.h"
 
 int main(int argc, char const* argv[])
 {
@@ -66,8 +66,9 @@ int main(int argc, char const* argv[])
 	auto i = 0;
 	auto m1 = std::string();
 	auto m2 = std::string();
-	auto p = chess_lib::MovePusher();
-	auto mg = chess_lib::MoveGenerator(&board);
+	auto p = chess_lib::MovePusher::GetInstance();
+	auto mg = chess_lib::MoveGenerator();
+	auto mc = chess_lib::MoveController::GetInstance();
 
 	while (true)
 	{
@@ -108,15 +109,14 @@ int main(int argc, char const* argv[])
 			
 		}
 		std::cout << '\n';
-		std::cout << "Check: " << (mg.CanKingBeInCheck(!board.GetIsWhiteMove())) << '\n';
-		std::cout << "Castling?: " << mg.GenerateCastlings(board.GetIsWhiteMove()).size() << '\n';
+		std::cout << "Check: " << (mg.CanKingBeInCheck(board, !board.GetIsWhiteMove())) << '\n';
 		
 		std::cout << "Move a piece in: ";
 		std::cin >> m1;
 		std::cout << "Move a piece to: ";
 		std::cin >> m2;
 
-		if (!p.MovePiece(board, chess_lib::Move{ board.ConvertToIndex(m1), board.ConvertToIndex(m2) }))
+		if (!mc.ConfirmMove(board, chess_lib::Move{board.ConvertToIndex(m1),board.ConvertToIndex(m2) }))
 			std::cout << "no move\n";
 
 		if (board.NeedPromotion())

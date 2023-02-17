@@ -35,8 +35,8 @@ namespace chess_lib
 	{
 		auto moves = std::vector<Move>();
 		{
-			auto mg = MoveGenerator(m_pBoard);
-			moves = mg.GenerateCastlings(m_pBoard->GetIsWhiteMove());
+			auto mg = MoveGenerator();
+			moves = mg.GenerateCastlings(*m_pBoard, m_pBoard->GetIsWhiteMove());
 		}
 		if (moves.size() == 0)
 			return false;
@@ -64,6 +64,7 @@ namespace chess_lib
 		m_pMove = std::make_shared<Move>(move);
 		auto& arr = board.GetBoard();
 		auto is_white_turn = board.GetIsWhiteMove();
+		auto mg = MoveGenerator();
 
 		if (!(move.GetP1() < 64 && move.GetP2() < 64))
 			return false;
@@ -77,16 +78,11 @@ namespace chess_lib
 			return false;
 
 		auto cpy = board;
-		auto cur_in_check = false;
-		{
-			auto mg = MoveGenerator(&board);
-			cur_in_check = mg.CanKingBeInCheck(!is_white_turn);
-		}
+		auto cur_in_check = mg.CanKingBeInCheck(*m_pBoard, !is_white_turn);
 		if(cur_in_check)
 		{
 			cpy.ForcedMove(move);
-			auto mg = MoveGenerator(&cpy);
-			if (mg.CanKingBeInCheck(!is_white_turn) && cur_in_check)
+			if (mg.CanKingBeInCheck(*m_pBoard, !is_white_turn) && cur_in_check)
 				return false;
 		}
 
@@ -104,4 +100,6 @@ namespace chess_lib
 		board.ForcedMove(move);
 		return true;
 	}
+
+	MovePusher MovePusher::s_Instance;
 }

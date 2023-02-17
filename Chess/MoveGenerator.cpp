@@ -2,15 +2,15 @@
 
 namespace chess_lib
 {
-	std::vector<Move> MoveGenerator::f_GenerateLineMoves(const uint8_t position, const std::vector<pos> vectors, bool iterative, bool only_enemy) const
+	std::vector<Move> MoveGenerator::f_GenerateLineMoves(Board& p_board, const uint8_t position, const std::vector<pos> vectors, bool iterative, bool only_enemy) const
 	{
-		auto &arr = m_pBoard->GetBoard();
+		auto &arr = p_board.GetBoard();
 		auto moves = std::vector<Move>();
-		auto cur_pos = pos{ char(position % 8), char(position / 8) };
+		auto cur_pos = pos{ int8_t(position % 8), int8_t(position / 8) };
 
 		for (uint8_t i = 0; i < vectors.size(); i++)
 		{
-			cur_pos = pos{ char(position % 8), char(position / 8) };
+			cur_pos = pos{ int8_t(position % 8), int8_t(position / 8) };
 			cur_pos.x += vectors[i].x;
 			cur_pos.y += vectors[i].y;
 
@@ -39,42 +39,37 @@ namespace chess_lib
 		return moves;
 	}
 
-	MoveGenerator::MoveGenerator(Board* p_board)
+	std::vector<Move> MoveGenerator::GenerateRookMove(Board& p_board, const uint8_t position, bool only_enemy) const
 	{
-		m_pBoard = p_board;
+		return f_GenerateLineMoves(p_board, position, { {1,0},{0,1},{-1,0},{0,-1} }, true, only_enemy);
 	}
 
-	std::vector<Move> MoveGenerator::GenerateRookMove(  const uint8_t position, bool only_enemy) const
+	std::vector<Move> MoveGenerator::GenerateBishopMove(Board& p_board, const uint8_t position, bool only_enemy) const
 	{
-		return f_GenerateLineMoves(position, { {1,0},{0,1},{-1,0},{0,-1} }, only_enemy);
+		return f_GenerateLineMoves(p_board, position, { {1,1},{-1,1},{-1,-1},{1,-1} }, true, only_enemy);
 	}
 
-	std::vector<Move> MoveGenerator::GenerateBishopMove(  const uint8_t position, bool only_enemy) const
+	std::vector<Move> MoveGenerator::GenerateQueenMove(Board& p_board, const uint8_t position, bool only_enemy) const
 	{
-		return f_GenerateLineMoves(position, { {1,1},{-1,1},{-1,-1},{1,-1} }, only_enemy);
+		return f_GenerateLineMoves(p_board, position, { {1,1},{-1,1},{-1,-1},{1,-1},{1,0},{0,1},{-1,0},{0,-1} }, true, only_enemy);
 	}
 
-	std::vector<Move> MoveGenerator::GenerateQueenMove(  const uint8_t position, bool only_enemy) const
+	std::vector<Move> MoveGenerator::GenerateKnightMove(Board& p_board, const uint8_t position, bool only_enemy) const
 	{
-		return f_GenerateLineMoves(position, { {1,1},{-1,1},{-1,-1},{1,-1},{1,0},{0,1},{-1,0},{0,-1} }, only_enemy);
+		return f_GenerateLineMoves(p_board, position, { {2,1},{2,-1},{-1,2},{1,2},{-2,1},{-2,-1},{-1,-2},{1,-2} }, false, only_enemy);
 	}
 
-	std::vector<Move> MoveGenerator::GenerateKnightMove(  const uint8_t position, bool only_enemy) const
+	std::vector<Move> MoveGenerator::GenerateKingMove(Board& p_board, const uint8_t position, bool only_enemy) const
 	{
-		return f_GenerateLineMoves(position, { {2,1},{2,-1},{-1,2},{1,2},{-2,1},{-2,-1},{-1,-2},{1,-2} }, false, only_enemy);
+		return f_GenerateLineMoves(p_board, position, { {1,1},{-1,1},{-1,-1},{1,-1},{1,0},{0,1},{-1,0},{0,-1} }, false, only_enemy);
 	}
 
-	std::vector<Move> MoveGenerator::GenerateKingMove(const uint8_t position, bool only_enemy) const
+	std::vector<Move> MoveGenerator::GeneratePawnMove(Board& p_board, const uint8_t position, bool only_enemy) const
 	{
-		return f_GenerateLineMoves(position, { {1,1},{-1,1},{-1,-1},{1,-1},{1,0},{0,1},{-1,0},{0,-1} }, false, only_enemy);
-	}
-
-	std::vector<Move> MoveGenerator::GeneratePawnMove(const uint8_t position, bool only_enemy) const
-	{
-		auto is_white_move = m_pBoard->GetIsWhiteMove();
-		auto &arr = m_pBoard->GetBoard();
+		auto is_white_move = p_board.GetIsWhiteMove();
+		auto &arr = p_board.GetBoard();
 		auto moves = std::vector<Move>();
-		auto prev_move = m_pBoard->GetPreviousMove();
+		auto prev_move = p_board.GetPreviousMove();
 
 		auto to_pos = [=](uint8_t ind) { return pos{ int8_t(ind % 8), int8_t(ind / 8) }; };
 		auto constr = [=](uint8_t ind) { return Move{ position, uint8_t(ind) }; };
@@ -129,12 +124,12 @@ namespace chess_lib
 		return moves;
 	}
 
-	std::vector<Move> MoveGenerator::GenerateCastlings(const bool is_white_turn) const
+	std::vector<Move> MoveGenerator::GenerateCastlings(Board& p_board, const bool is_white_turn) const
 	{
-		if(CanKingBeInCheck(is_white_turn))
+		if(CanKingBeInCheck(p_board, is_white_turn))
 			return std::vector<Move>();
 
-		auto caslstates = m_pBoard->GetCastlingState();
+		auto caslstates = p_board.GetCastlingState();
 		auto moves = std::vector<Move>();
 		auto state = false;
 		auto points = 0;
@@ -164,16 +159,16 @@ namespace chess_lib
 			for (x = (t == 0 ? 1 : -1); abs(x) < 3; x += (t == 0 ? 1 : -1))
 			{
 				
-				auto cpy = *m_pBoard;
+				auto cpy = p_board;
 				cpy.ForcedMove(Move{ get_king_pos, uint8_t(get_king_pos + x) });
-				auto mg = MoveGenerator(&cpy);
-				if (!mg.CanKingBeInCheck(is_white_turn))
+				auto mg = MoveGenerator();
+				if (!mg.CanKingBeInCheck(p_board, is_white_turn))
 					points++;
 				if (abs(x + (t == 0 ? 1 : -1)) == 3)
 					break;
 			}
 			for (int8_t f = (t == 0 ? 1 : -1); abs(f) < 3 + t; f += (t == 0 ? 1 : -1))
-				points += (m_pBoard->GetBoard()[get_king_pos + f].side == SideType::none);
+				points += (p_board.GetBoard()[get_king_pos + f].side == SideType::none);
 			if (points == 4 + t)
 				moves.push_back(Move{ get_king_pos, uint8_t(get_king_pos + x) });
 		}
@@ -181,17 +176,17 @@ namespace chess_lib
 		return moves;
 	}
 
-	bool MoveGenerator::CanKingBeInCheck(const bool is_white_turn) const
+	bool MoveGenerator::CanKingBeInCheck(Board& p_board, const bool is_white_turn) const
 	{
-		auto &arr = m_pBoard->GetBoard();
+		auto &arr = p_board.GetBoard();
 		auto king_index = uint8_t(0);
 		auto side = [=](bool is_white) {return is_white ? SideType::white : SideType::black; };
 
 		for (king_index; king_index < arr.size() && arr[king_index].type != PieceType::king || arr[king_index].side == side(is_white_turn); king_index++);
 
-		auto enemy_list_rook = GenerateRookMove(king_index, true);
-		auto enemy_list_bishop = GenerateBishopMove(king_index, true);
-		auto enemy_list_knight = GenerateKnightMove(king_index, true);
+		auto enemy_list_rook = GenerateRookMove(p_board, king_index, true);
+		auto enemy_list_bishop = GenerateBishopMove(p_board, king_index, true);
+		auto enemy_list_knight = GenerateKnightMove(p_board, king_index, true);
 
 		for (auto move : enemy_list_knight)
 			if (arr[move.GetP2()].type == PieceType::knight && arr[move.GetP2()].side != side(is_white_turn))

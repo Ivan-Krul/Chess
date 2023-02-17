@@ -137,6 +137,7 @@
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Chess.cpp" />
+    <ClCompile Include="MoveController.cpp" />
     <ClCompile Include="MoveGenerator.cpp" />
     <ClCompile Include="MovePusher.cpp" />
   </ItemGroup>
@@ -147,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="MoveController.h" />
     <ClInclude Include="MoveGenerator.h" />
     <ClInclude Include="MovePusher.h" />
     <ClInclude Include="Tile.h" />
