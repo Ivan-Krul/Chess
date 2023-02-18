@@ -78,6 +78,51 @@ namespace chess_lib
 		static auto our_pieces = std::vector<uint8_t>();
 		static auto our_side = board.GetIsWhiteMove() ? SideType::white : SideType::black;
 
+		if (!mg.CanKingBeInCheck(board, board.GetIsWhiteMove()))
+			return false;
+
+		our_side = board.GetIsWhiteMove() ? SideType::white : SideType::black;
+		our_pieces.clear();
+
+		for (uint8_t i = 0; i < board.GetBoard().size(); i++)
+			if (board.GetBoard()[i].side == our_side)
+				our_pieces.push_back(i);
+
+		static auto prop = std::vector<Move>();
+
+		for (const auto& p : our_pieces)
+		{
+			prop = Proposition(board, p);
+			//for (const auto& m : prop)
+			//	printf("D:\t%s -> %s\n", board.ConvertFromIndex(m.GetP1()).c_str(), board.ConvertFromIndex(m.GetP2()).c_str());
+			if (prop.size() != 0)
+			{
+				//printf("////////////////\n");
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	bool MoveController::IsCheck(const Board& board) const
+	{
+		auto mg = MoveGenerator();
+		return mg.CanKingBeInCheck(board,!board.GetIsWhiteMove());
+	}
+
+	bool MoveController::IsStalemate(const Board& board) const
+	{
+		if (IsMate(board))
+			return false;
+
+		static auto mg = MoveGenerator();
+		static auto our_pieces = std::vector<uint8_t>();
+		static auto our_side = board.GetIsWhiteMove() ? SideType::white : SideType::black;
+
+		our_side = board.GetIsWhiteMove() ? SideType::white : SideType::black;
+		our_pieces.clear();
+
 		for (uint8_t i = 0; i < board.GetBoard().size(); i++)
 			if (board.GetBoard()[i].side == our_side)
 				our_pieces.push_back(i);
@@ -87,6 +132,58 @@ namespace chess_lib
 				return false;
 
 		return true;
+	}
+
+	bool MoveController::IsDraw(const Board& board) const
+	{
+		if (IsMate(board))
+			return false;
+
+		static auto wpos = std::vector<uint8_t>();
+		static auto bpos = std::vector<uint8_t>();
+
+		for (uint8_t i = 0; i < board.GetBoard().size(); i++)
+		{
+			if (board.GetBoard()[i].side == SideType::white)
+				wpos.push_back(i);
+			else if (board.GetBoard()[i].side == SideType::black)
+				bpos.push_back(i);
+		}
+
+		static auto wpieces = std::vector<PieceType>();
+		static auto bpieces = std::vector<PieceType>();
+
+		static auto wcount = std::array<uint8_t, 7>();
+		static auto bcount = std::array<uint8_t, 7>();
+
+		wpieces.clear();
+		bpieces.clear();
+
+		for (const auto& p : wpos)
+			wpieces.push_back(board.GetBoard()[p].type);
+		for (const auto& p : bpos)
+			bpieces.push_back(board.GetBoard()[p].type);
+
+		if (wpieces.size() == 1 && bpieces.size() == wpieces.size())
+			return true;
+
+		for (const auto& t : wpieces)
+			wcount[uint8_t(t)]++;
+
+		for (const auto& t : bpieces)
+			bcount[uint8_t(t)]++;
+		
+		if (wcount == std::array<uint8_t, 7>{0, 0, 0, 1, 0, 0, 1} && bpieces.size() == 1)
+			return true;
+		else if (bcount == std::array<uint8_t, 7>{0, 0, 0, 1, 0, 0, 1} && wpieces.size() == 1)
+			return true;
+		else if (wcount == std::array<uint8_t, 7>{0, 0, 0, 0, 1, 0, 1}&& bpieces.size() == 1)
+			return true;
+		else if (bcount == std::array<uint8_t, 7>{0, 0, 0, 0, 1, 0, 1}&& wpieces.size() == 1)
+			return true;
+		
+
+		return false;
 	}
 
 	MoveController MoveController::m_Instance;

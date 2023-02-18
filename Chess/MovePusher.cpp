@@ -77,15 +77,6 @@ namespace chess_lib
 		if (move.GetP1() == move.GetP2() && !board.NeedPromotion())
 			return false;
 
-		auto cpy = board;
-		auto cur_in_check = mg.CanKingBeInCheck(*m_pBoard, !is_white_turn);
-		if(cur_in_check)
-		{
-			cpy.ForcedMove(move);
-			if (mg.CanKingBeInCheck(*m_pBoard, !is_white_turn) && cur_in_check)
-				return false;
-		}
-
 		if (f_EnPassantMove())
 			return true;
 		else if (f_CastlingMove())

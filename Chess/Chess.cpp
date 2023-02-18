@@ -66,11 +66,9 @@ int main(int argc, char const* argv[])
 	auto i = 0;
 	auto m1 = std::string();
 	auto m2 = std::string();
-	auto p = chess_lib::MovePusher::GetInstance();
-	auto mg = chess_lib::MoveGenerator();
 	auto mc = chess_lib::MoveController::GetInstance();
 
-	while (true)
+	while (!mc.IsMate(board) && !mc.IsStalemate(board) && !mc.IsDraw(board))
 	{
 		for(uint8_t i = 0; i < 64; i++)
 		{
@@ -109,7 +107,7 @@ int main(int argc, char const* argv[])
 			
 		}
 		std::cout << '\n';
-		std::cout << "Check: " << (mg.CanKingBeInCheck(board, !board.GetIsWhiteMove())) << '\n';
+		std::cout << "Check: " << mc.IsCheck(board) << '\n';
 		
 		std::cout << "Move a piece in: ";
 		std::cin >> m1;
@@ -126,13 +124,13 @@ int main(int argc, char const* argv[])
 			std::cout << "Choose a promotion piece in " << board.ConvertFromIndex(board.GetPreviousMove()->GetP2()) << ": ";
 			std::cin >> s;
 			if (s == "queen")
-				p.MovePiece(board, chess_lib::Move{ board.ConvertToIndex(m1), board.ConvertToIndex(m2) }, chess_lib::Board::PromotionChoice::queen);
+				mc.PromoteTo(board, chess_lib::Board::PromotionChoice::queen);
 			else if (s == "bishop")
-				p.MovePiece(board, chess_lib::Move{ board.ConvertToIndex(m1), board.ConvertToIndex(m2) }, chess_lib::Board::PromotionChoice::bishop);
+				mc.PromoteTo(board, chess_lib::Board::PromotionChoice::bishop);
 			else if (s == "knight")
-				p.MovePiece(board, chess_lib::Move{ board.ConvertToIndex(m1), board.ConvertToIndex(m2) }, chess_lib::Board::PromotionChoice::knight);
+				mc.PromoteTo(board, chess_lib::Board::PromotionChoice::knight);
 			else if (s == "rook")
-				p.MovePiece(board, chess_lib::Move{ board.ConvertToIndex(m1), board.ConvertToIndex(m2) }, chess_lib::Board::PromotionChoice::rook);
+				mc.PromoteTo(board, chess_lib::Board::PromotionChoice::rook);
 			else
 				goto ty_again;
 		}
@@ -142,8 +140,12 @@ int main(int argc, char const* argv[])
 		std::cout << '\n';
 	}
 
-
-	std::cout << "Chess!\n";
-	//system("pause");
+	if (mc.IsMate(board))
+		std::cout << "Mate!\n" << (!board.GetIsWhiteMove() ? "White" : "Black") << " wins\n";
+	else if(mc.IsStalemate(board))
+		std::cout << "Stalemate!\nDraw\n";
+	else
+		std::cout << "Draw!\n";
+	system("pause");
 	return 0;
 }

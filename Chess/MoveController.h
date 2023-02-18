@@ -20,6 +20,9 @@ namespace chess_lib
 		void PromoteTo(Board& board, Board::PromotionChoice choice);
 
 		bool IsMate(const Board& board) const;
+		bool IsCheck(const Board& board) const;
+		bool IsStalemate(const Board& board) const;
+		bool IsDraw(const Board& board) const;
 
 		// Singleton pattern
 		static MoveController& GetInstance()
