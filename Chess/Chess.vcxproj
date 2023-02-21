@@ -140,6 +140,8 @@
     <ClCompile Include="MoveController.cpp" />
     <ClCompile Include="MoveGenerator.cpp" />
     <ClCompile Include="MovePusher.cpp" />
+    <ClCompile Include="NetworkTeller.cpp" />
+    <ClCompile Include="ConRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetworkLib\NetworkLib.vcxproj">
@@ -151,7 +153,10 @@
     <ClInclude Include="MoveController.h" />
     <ClInclude Include="MoveGenerator.h" />
     <ClInclude Include="MovePusher.h" />
+    <ClInclude Include="NetworkTeller.h" />
+    <ClInclude Include="ConRenderer.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="TypeInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

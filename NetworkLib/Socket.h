@@ -7,8 +7,10 @@
 
 #define IPV4 AF_INET
 #define TCP SOCK_STREAM
+#ifndef SOCKET_MESSAGE_SIZE
+#define SOCKET_MESSAGE_SIZE 16
+#endif
 
-#ifdef SOCKET_MESSAGE_SIZE
 namespace network_lib
 {
 	class Socket
@@ -50,4 +52,3 @@ namespace network_lib
 		~Socket();
 	};
 }
-#endif

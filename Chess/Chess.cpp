@@ -1,145 +1,79 @@
 #include <iostream>
-#define SOCKET_MESSAGE_SIZE 64
-#include "Socket.h"
-#include "Socket.cpp"
 
+#include "NetworkTeller.h"
+#include "ConRenderer.h"
 #include "MoveController.h"
+#include "TypeInterface.h"
 
 int main(int argc, char const* argv[])
 {
-/*	auto b = network_lib::Booter::GetInstance();
-	b.Init();
-	network_lib::Socket socket;
-	socket.SetPort(5001);
+	auto nt = NetworkTeller::GetInstance();
+	auto mc = chess_lib::MoveController::GetInstance();
+	auto r = ConRenderer();
+	auto board = chess_lib::Board();
+	auto issr = false;
+	auto side = false;
+	auto ip = std::string();
 
-	char c = 0;
+	std::cout << "Init game(0 - client/1 - server):";
+	std::cin >> issr;
 
-	std::cout << socket.MessageSize() << '\n';
-
-	while(c != 'c' && c != 's')
-		std::cin >> c;
-
-	if (c == 'c')
+	if (issr)
 	{
-		std::string ip;
-		std::cin >> ip;
-		if (socket.Connect(ip) != 0)
+		nt.StartAsServer();
+		while (!nt.IsSocketGot());
+		side = nt.InitGameFromServer();
+		while (nt.IsConnection() && (!mc.IsMate(board) && !mc.IsStalemate(board) && !mc.IsDraw(board)))
 		{
-			std::cout << "Oh no!\n";
-			system("pause");
-			exit(0);
+			if (nt.IsIncome())
+			{
+				if (nt.IsSpecial())
+					nt.ReadSpecialMessage();
+				if (!nt.IsConnection())
+					break;
+				RecreateMove(board, nt.RecreateMove());
+			}
+			if (board.GetIsWhiteMove() != side)
+			{
+				std::cout << "Waiting...";
+				std::cout << "\r\r\r\r\r\r\r\r\r\r";
+				continue;
+			}
+			std::cout << r.Render(board, side);
+			auto recr = FormQuire(board);
+			nt.TellMove(recr.move, recr.prom);
 		}
-		while (!socket.CanBeRecievedFromThisSocket());
-		std::cout << "Message: \"" << socket.GetMessage_() << "\"\n";
-
-		socket.SendToThisSocket("Hello, from client!");
-		std::cout << "Send!\n";
-
-		while (!socket.CanBeRecievedFromThisSocket());
-		std::cout << "Message: \"" << socket.GetMessage_() << "\"\n";
+		nt.Disconnect();
 	}
 	else
 	{
-		socket.Listen();
-		network_lib::Socket client_sock(false);
-		while (socket.CanBeAccepted(client_sock))
+		std::cout << "IP address:";
+		std::cin >> ip;
+		nt.StartAsClient(ip);
+		while (!nt.IsIncome());
+		side = nt.ReadSpecialMessage();
+		while (nt.IsConnection() && (!mc.IsMate(board) && !mc.IsStalemate(board) && !mc.IsDraw(board)))
 		{
-			std::cout << "Connected!\n";
-			client_sock.SelectEventForBind(0);
-
-			client_sock.SendToThisSocket("Hello!, from server!");
-			std::cout << "Send!\n";
-
-			while (!client_sock.CanBeRecievedFromThisSocket());
-			std::cout << "Message: \"" << client_sock.GetMessage_() << "\"\n";
-
-			client_sock.SendToThisSocket("Hello!, from server!");
-			std::cout << "Send!\n";
-
-			break;
-		}
-
-	}*/
-
-	auto board = chess_lib::Board();
-	auto arr = board.GetBoard();
-	auto i = 0;
-	auto m1 = std::string();
-	auto m2 = std::string();
-	auto mc = chess_lib::MoveController::GetInstance();
-
-	while (!mc.IsMate(board) && !mc.IsStalemate(board) && !mc.IsDraw(board))
-	{
-		for(uint8_t i = 0; i < 64; i++)
-		{
-			switch (arr[i].type)
+			if (nt.IsIncome())
 			{
-				case chess_lib::PieceType::pawn:
-					std::cout << char('p' + (uint8_t(arr[i].side) - 2) * ('a' - 'A'));
+				if (nt.IsSpecial())
+					nt.ReadSpecialMessage();
+				if (!nt.IsConnection())
 					break;
-				case chess_lib::PieceType::rook:
-					std::cout << char('r' + (uint8_t(arr[i].side) - 2) * ('a' - 'A'));
-					break;
-				case chess_lib::PieceType::knight:
-					std::cout << char('n' + (uint8_t(arr[i].side) - 2) * ('a' - 'A'));
-					break;
-				case chess_lib::PieceType::bishop:
-					std::cout << char('b' + (uint8_t(arr[i].side) - 2) * ('a' - 'A'));
-					break;
-				case chess_lib::PieceType::queen:
-					std::cout << char('q' + (uint8_t(arr[i].side) - 2) * ('a' - 'A'));
-					break;
-				case chess_lib::PieceType::king:
-					std::cout << char('k' + (uint8_t(arr[i].side) - 2) * ('a' - 'A'));
-					break;
-				default:
-					if (board.GetPreviousMove()->GetP1() == i)
-						std::cout << '*';
-					else
-						std::cout << '.';
-					break;
+				RecreateMove(board, nt.RecreateMove());
 			}
-			std::cout << ' ';
-			if ((i + 1) % 8 == 0)
+			if (board.GetIsWhiteMove() != side)
 			{
-				std::cout << '\n';
+				std::cout << "Waiting...";
+				std::cout << "\r\r\r\r\r\r\r\r\r\r";
+				continue;
 			}
-			
+			auto recr = FormQuire(board);
+			nt.TellMove(recr.move, recr.prom);
 		}
-		std::cout << '\n';
-		std::cout << "Check: " << mc.IsCheck(board) << '\n';
-		
-		std::cout << "Move a piece in: ";
-		std::cin >> m1;
-		std::cout << "Move a piece to: ";
-		std::cin >> m2;
-
-		if (!mc.ConfirmMove(board, chess_lib::Move{board.ConvertToIndex(m1),board.ConvertToIndex(m2) }))
-			std::cout << "no move\n";
-
-		if (board.NeedPromotion())
-		{
-			std::string s;
-		ty_again:
-			std::cout << "Choose a promotion piece in " << board.ConvertFromIndex(board.GetPreviousMove()->GetP2()) << ": ";
-			std::cin >> s;
-			if (s == "queen")
-				mc.PromoteTo(board, chess_lib::Board::PromotionChoice::queen);
-			else if (s == "bishop")
-				mc.PromoteTo(board, chess_lib::Board::PromotionChoice::bishop);
-			else if (s == "knight")
-				mc.PromoteTo(board, chess_lib::Board::PromotionChoice::knight);
-			else if (s == "rook")
-				mc.PromoteTo(board, chess_lib::Board::PromotionChoice::rook);
-			else
-				goto ty_again;
-		}
-
-		arr = board.GetBoard();		
-
-		std::cout << '\n';
+		nt.Disconnect();
 	}
-
+	
 	if (mc.IsMate(board))
 		std::cout << "Mate!\n" << (!board.GetIsWhiteMove() ? "White" : "Black") << " wins\n";
 	else if(mc.IsStalemate(board))
