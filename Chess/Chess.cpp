@@ -31,7 +31,7 @@ int main(int argc, char const* argv[])
 					nt.ReadSpecialMessage();
 				if (!nt.IsConnection())
 					break;
-				RecreateMove(board, nt.RecreateMove());
+				TypeInterface::RecreateMove(board, nt.RecreateMove());
 			}
 			if (board.GetIsWhiteMove() != side)
 			{
@@ -40,7 +40,7 @@ int main(int argc, char const* argv[])
 				continue;
 			}
 			std::cout << r.Render(board, side);
-			auto recr = FormQuire(board);
+			auto recr = TypeInterface::FormQuire(board);
 			nt.TellMove(recr.move, recr.prom);
 		}
 		nt.Disconnect();
@@ -60,7 +60,7 @@ int main(int argc, char const* argv[])
 					nt.ReadSpecialMessage();
 				if (!nt.IsConnection())
 					break;
-				RecreateMove(board, nt.RecreateMove());
+				TypeInterface::RecreateMove(board, nt.RecreateMove());
 			}
 			if (board.GetIsWhiteMove() != side)
 			{
@@ -68,7 +68,7 @@ int main(int argc, char const* argv[])
 				std::cout << "\r\r\r\r\r\r\r\r\r\r";
 				continue;
 			}
-			auto recr = FormQuire(board);
+			auto recr = TypeInterface::FormQuire(board);
 			nt.TellMove(recr.move, recr.prom);
 		}
 		nt.Disconnect();
