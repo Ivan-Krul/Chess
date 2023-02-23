@@ -16,7 +16,7 @@ namespace chess_lib
 		MovePusher() = default;
 
 	public:
-		const bool MovePiece(Board& board, Move move, Board::PromotionChoice prom = Board::PromotionChoice::none);
+		const bool MovePiece(Board& board, Move move, PromotionChoice prom = PromotionChoice::none);
 
 		// Singleton pattern
 		static MovePusher& GetInstance()

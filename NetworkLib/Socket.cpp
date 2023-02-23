@@ -104,6 +104,7 @@ namespace network_lib
 
 	int Socket::SendToThisSocket(const std::string message)
 	{
+		memset(m_Message, 0, SOCKET_MESSAGE_SIZE);
 		memcpy(m_Message, message.c_str(), message.size());
 		return send(m_Socket, m_Message, SOCKET_MESSAGE_SIZE, 0);
 	}

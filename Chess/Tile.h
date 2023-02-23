@@ -44,6 +44,21 @@ namespace chess_lib
 		}
 	};
 
+	enum class PromotionChoice
+	{
+		none,
+		queen,
+		knight,
+		rook,
+		bishop
+	};
+
+	struct GlobMove
+	{
+		Move mv;
+		PromotionChoice prom;
+	};
+
 	struct pos
 	{
 		int8_t x : 4;

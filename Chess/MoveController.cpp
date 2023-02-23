@@ -67,7 +67,7 @@ namespace chess_lib
 		return board.NeedPromotion();
 	}
 
-	void MoveController::PromoteTo(Board& board, Board::PromotionChoice choice)
+	void MoveController::PromoteTo(Board& board, PromotionChoice choice)
 	{
 		board.ChoosePromotion(choice);
 	}

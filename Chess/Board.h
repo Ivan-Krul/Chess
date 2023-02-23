@@ -16,15 +16,6 @@ namespace chess_lib
 			char bq : 2;
 			char bk : 2;
 		};
-
-		enum class PromotionChoice
-		{
-			none,
-			queen,
-			knight,
-			rook,
-			bishop
-		};
 	private:
 		caslstate m_CastlingState;
 		std::array<Tile, 64> m_Board;
@@ -40,8 +31,8 @@ namespace chess_lib
 		const bool GetIsWhiteMove() const;
 		const caslstate GetCastlingState() const;
 
-		const uint8_t ConvertToIndex(std::string position) const;
-		const std::string ConvertFromIndex(uint8_t index) const;
+		static const uint8_t ConvertToIndex(std::string position);
+		static const std::string ConvertFromIndex(uint8_t index);
 
 		void ForcedMove(const Move move, bool need_accept = true);
 

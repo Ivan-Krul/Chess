@@ -58,7 +58,7 @@ namespace chess_lib
 		return false;
 	}
 
-	const bool MovePusher::MovePiece(Board& board, Move move, Board::PromotionChoice prom)
+	const bool MovePusher::MovePiece(Board& board, Move move, PromotionChoice prom)
 	{
 		m_pBoard = &board;
 		m_pMove = std::make_shared<Move>(move);

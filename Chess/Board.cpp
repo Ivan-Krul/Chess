@@ -60,7 +60,7 @@ namespace chess_lib
 		return m_CastlingState;
 	}
 
-	const uint8_t Board::ConvertToIndex(std::string position) const
+	const uint8_t Board::ConvertToIndex(std::string position)
 	{
 		if (position.size() < 2)
 			return 0xff;
@@ -78,7 +78,7 @@ namespace chess_lib
 			return 0xff;
 	}
 
-	const std::string Board::ConvertFromIndex(uint8_t index) const
+	const std::string Board::ConvertFromIndex(uint8_t index)
 	{
 		auto x = index % 8;
 		auto y = index / 8;
@@ -138,19 +138,19 @@ namespace chess_lib
 	{
 		switch (type)
 		{
-			case chess_lib::Board::PromotionChoice::queen:
+			case chess_lib::PromotionChoice::queen:
 				m_Board[PromPos()].type = PieceType::queen;
 				m_IsWhiteMove = !m_IsWhiteMove;
 				break;
-			case chess_lib::Board::PromotionChoice::knight:
+			case chess_lib::PromotionChoice::knight:
 				m_Board[PromPos()].type = PieceType::knight;
 				m_IsWhiteMove = !m_IsWhiteMove;
 				break;
-			case chess_lib::Board::PromotionChoice::rook:
+			case chess_lib::PromotionChoice::rook:
 				m_Board[PromPos()].type = PieceType::rook;
 				m_IsWhiteMove = !m_IsWhiteMove;
 				break;
-			case chess_lib::Board::PromotionChoice::bishop:
+			case chess_lib::PromotionChoice::bishop:
 				m_Board[PromPos()].type = PieceType::bishop;
 				m_IsWhiteMove = !m_IsWhiteMove;
 				break;

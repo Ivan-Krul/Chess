@@ -140,8 +140,8 @@
     <ClCompile Include="MoveController.cpp" />
     <ClCompile Include="MoveGenerator.cpp" />
     <ClCompile Include="MovePusher.cpp" />
-    <ClCompile Include="NetworkTeller.cpp" />
     <ClCompile Include="ConRenderer.cpp" />
+    <ClCompile Include="TypeInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetworkLib\NetworkLib.vcxproj">
@@ -153,7 +153,6 @@
     <ClInclude Include="MoveController.h" />
     <ClInclude Include="MoveGenerator.h" />
     <ClInclude Include="MovePusher.h" />
-    <ClInclude Include="NetworkTeller.h" />
     <ClInclude Include="ConRenderer.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TypeInterface.h" />

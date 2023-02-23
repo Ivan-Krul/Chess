@@ -17,7 +17,7 @@ namespace chess_lib
 		bool ConfirmMove(const Board& board, const Move move);
 
 		bool NeedPromotion(const Board& board) const;
-		void PromoteTo(Board& board, Board::PromotionChoice choice);
+		void PromoteTo(Board& board, PromotionChoice choice);
 
 		bool IsMate(const Board& board) const;
 		bool IsCheck(const Board& board) const;
