@@ -39,11 +39,11 @@ namespace network_lib
 		void SetPort(const uint16_t port);
 		const int Connect(const std::string ip_address);
 		void Listen();
-		const bool CanBeAccepted(Socket& socket) const;
+		const SOCKET CanBeAccepted(Socket& socket) const;
 		const size_t MessageSize() const;
 		void SelectEventForBind(HANDLE h_event_obj, long network_event = FD_READ);
 		
-		const bool CanBeRecievedFromThisSocket();
+		const SOCKET CanBeRecievedFromThisSocket();
 		const std::string GetMessage_() const;
 
 		int SendToThisSocket(const std::string message);

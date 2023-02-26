@@ -8,6 +8,6 @@ public:
 	static chess_lib::GlobMove FormQuire(chess_lib::Board& board);
 	static chess_lib::GlobMove ConvertFromString(std::string str);
 	static std::string ConvertToString(chess_lib::GlobMove mov);
-	static bool IsLegal(std::string str);
-	static bool RecreateMove(chess_lib::Board& board, chess_lib::GlobMove mov);
+	static bool IsLegal(const std::string str);
+	static bool RecreateMove(chess_lib::Board& board, const chess_lib::GlobMove mov);
 };

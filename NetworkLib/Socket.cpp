@@ -76,7 +76,7 @@ namespace network_lib
 		listen(m_Socket, 100); // listening latest messages, then we're got a socket
 	}
 
-	const bool Socket::CanBeAccepted(Socket& socket) const
+	const SOCKET Socket::CanBeAccepted(Socket& socket) const
 	{
 		static int size = sizeof(m_SocketAddress);
 		return (socket.GetSocket() = accept(m_Socket, (sockaddr*)&socket.GetSocketAddress(), &size));
@@ -92,7 +92,7 @@ namespace network_lib
 		WSAEventSelect(m_Socket, h_event_obj, network_event);
 	}
 
-	const bool Socket::CanBeRecievedFromThisSocket()
+	const SOCKET Socket::CanBeRecievedFromThisSocket()
 	{
 		return recv(m_Socket, m_Message, SOCKET_MESSAGE_SIZE, 0);
 	}
