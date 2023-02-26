@@ -141,6 +141,7 @@
     <ClCompile Include="MoveGenerator.cpp" />
     <ClCompile Include="MovePusher.cpp" />
     <ClCompile Include="ConRenderer.cpp" />
+    <ClCompile Include="NetworkTeller.cpp" />
     <ClCompile Include="TypeInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +155,7 @@
     <ClInclude Include="MoveGenerator.h" />
     <ClInclude Include="MovePusher.h" />
     <ClInclude Include="ConRenderer.h" />
+    <ClInclude Include="NetworkTeller.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TypeInterface.h" />
   </ItemGroup>
