@@ -28,7 +28,7 @@ int main(int argc, char const* argv[])
 
 	if (n_is_server)
 	{
-		std::cout << "Waiting for connection...";
+		std::cout << "Waiting for connection...\n";
 		side_white = nt.InitSocket(n_is_server);
 	}
 	else
