@@ -7,7 +7,16 @@
 
 int main(int argc, char const* argv[])
 {
-	auto nt = NetworkTeller::getInstance();
+	auto n_booter = network_lib::Booter::GetInstance();
+
+	if (n_booter.Init() != 0)
+	{
+		std::cout << "Network service: WSA isn't startup correctly, abort\n";
+		system("pause");
+		return 0;
+	}
+
+	auto nt = NetworkTeller();
 	bool n_is_server;
 
 	auto mc = chess_lib::MoveController::GetInstance();
@@ -15,19 +24,15 @@ int main(int argc, char const* argv[])
 	auto board = chess_lib::Board();
 	bool side_white = false;
 
-	if (nt.InitWSA() != 0)
-	{
-		std::cout << "Network service: WSA isn't startup correctly, abort\n";
-		system("pause");
-		return 0;
-	}
-
 	std::cout << "Chess\n";
 	std::cout << "Type of connection(0 - client, 1 - server): ";
 	std::cin >> n_is_server;
 
 	if (n_is_server)
-		side_white = nt.InitSocketsAsServer();
+	{
+		std::cout << "Waiting for connection...";
+		side_white = nt.InitSocket(n_is_server);
+	}
 	else
 	{
 		std::string n_ip;
@@ -36,7 +41,7 @@ int main(int argc, char const* argv[])
 		std::cin >> n_ip;
 
 		// Connect to the server using a socket and wait for an initialization message
-		if ((side_white = nt.InitSocketAsClient(n_ip)) == SOCKET_ERROR)
+		if ((side_white = nt.InitSocket(n_is_server, n_ip)) == SOCKET_ERROR)
 		{
 			std::cout << "Network service: Connection proccess has failured, abort\n";
 			system("pause");
@@ -44,20 +49,19 @@ int main(int argc, char const* argv[])
 		}
 		std::cout << "Connected\n";
 	}
-
 	std::cout << "You are playing as " << (side_white ? "white" : "black") << '\n';
 
+	// loop
 	while (!mc.IsMate(board) && !mc.IsStalemate(board) && !mc.IsDraw(board))
 	{
 		if (side_white != board.GetIsWhiteMove())
 		{
-			
 			std::cout << "Waiting for further action...\n";
-			
-			// checking for status
+
+			// getting a quert and checking for status
 			if (nt.Listen() == SOCKET_ERROR)
 				break;
-			if (nt.isQuitMsg())
+			else if (nt.isQuitMsg())
 				break;
 
 			// checking is message correct
@@ -67,7 +71,7 @@ int main(int argc, char const* argv[])
 				std::cout << "Network service: The message, what was recieved isn't correct\n";
 				continue;
 			}
-			
+
 			// convert and recreate a move
 			auto gm = nt.ConvertToMove();
 			if (!TypeInterface::RecreateMove(board, gm))
@@ -83,9 +87,9 @@ int main(int argc, char const* argv[])
 		nt.SendMove(gm);
 	}
 	nt.SendQuitMessage();
-
 	WSACleanup();
 
+	// checking for situation of ending a game
 	if (mc.IsMate(board))
 		std::cout << "Mate!\n" << (!board.GetIsWhiteMove() ? "White" : "Black") << " wins\n";
 	else if (mc.IsStalemate(board))

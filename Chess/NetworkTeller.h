@@ -10,9 +10,7 @@
 class NetworkTeller
 {
 public:
-	int InitWSA(char maj_ver = 2, char min_ver = 2);
-	int InitSocketsAsServer();
-	int InitSocketAsClient(const std::string& ip);
+	int InitSocket(const bool is_server, const std::string ip = "");
 
 	int Listen();
 	void SendQuitMessage();
@@ -23,15 +21,11 @@ public:
 	void SendMove(const chess_lib::GlobMove& move);
 
 	// getters
-	static NetworkTeller& getInstance() noexcept;
-	const network_lib::Booter& getBooter() const noexcept;
 	const std::string getIPAddress() const noexcept;
 
 private:
 	const std::string c_QuitMessage = "$QuIt";
 	const std::string c_InitMessage = "$InIt";
-
-	network_lib::Booter m_Booter = network_lib::Booter::GetInstance();
 	
 	network_lib::Socket m_Sock;
 	network_lib::Socket m_SockCl;
@@ -43,9 +37,5 @@ private:
 
 	// private functions
 	network_lib::Socket& getSocket_() noexcept;
-
-	// singleton pattern
-	NetworkTeller() = default;
-	static NetworkTeller m_Instance;
 };
 
