@@ -15,28 +15,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Chess.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ConRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TypeInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkTeller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="..\Chess\Board.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Chess\MoveController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Chess\MoveGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Chess\MovePusher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Chess\Tile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TypeInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkTeller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClCompile Include="..\Chess\Board.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Chess\MoveController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Chess\MoveGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Chess\MovePusher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -21,32 +21,32 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{750375ac-e181-4a44-8c29-5963f934d8e1}</ProjectGuid>
-    <RootNamespace>Chess</RootNamespace>
+    <ProjectGuid>{0b1af051-81f6-4f0e-b113-991c7251a38b}</ProjectGuid>
+    <RootNamespace>ChessCore</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -76,12 +76,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)NetworkLib;$(SolutionDir)GLerKa;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)NetworkLib.lib;$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -92,14 +90,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)NetworkLib;$(SolutionDir)GLerKa;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)NetworkLib.lib;$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -108,12 +104,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)NetworkLib;$(SolutionDir)GLerKa;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)NetworkLib.lib;$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,37 +118,26 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)NetworkLib;$(SolutionDir)GLerKa;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)NetworkLib.lib;$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Chess.cpp" />
-    <ClCompile Include="ConRenderer.cpp" />
-    <ClCompile Include="NetworkTeller.cpp" />
-    <ClCompile Include="TypeInterface.cpp" />
+    <ClInclude Include="..\Chess\Board.h" />
+    <ClInclude Include="..\Chess\MoveController.h" />
+    <ClInclude Include="..\Chess\MoveGenerator.h" />
+    <ClInclude Include="..\Chess\MovePusher.h" />
+    <ClInclude Include="..\Chess\Tile.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ChessCore\ChessCore.vcxproj">
-      <Project>{0b1af051-81f6-4f0e-b113-991c7251a38b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\GLerKa\GLerKa.vcxproj">
-      <Project>{8e11ba86-6018-4dab-84a1-6e96c119fdca}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\NetworkLib\NetworkLib.vcxproj">
-      <Project>{29f29722-43fd-451e-84ca-f199ea952fd6}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ConRenderer.h" />
-    <ClInclude Include="NetworkTeller.h" />
-    <ClInclude Include="TypeInterface.h" />
+    <ClCompile Include="..\Chess\Board.cpp" />
+    <ClCompile Include="..\Chess\MoveController.cpp" />
+    <ClCompile Include="..\Chess\MoveGenerator.cpp" />
+    <ClCompile Include="..\Chess\MovePusher.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

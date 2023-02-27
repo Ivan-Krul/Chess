@@ -15,28 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Chess.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ConRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TypeInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkTeller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="LoaderModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ConRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TypeInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkTeller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClCompile Include="LoaderModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
