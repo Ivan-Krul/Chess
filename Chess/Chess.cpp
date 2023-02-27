@@ -8,11 +8,9 @@
 int main(int argc, char const* argv[])
 {
 	auto n_booter = network_lib::Booter::GetInstance();
-
 	if (n_booter.Init() != 0)
 	{
 		std::cout << "Network service: WSA isn't startup correctly, abort\n";
-		system("pause");
 		return 0;
 	}
 
@@ -44,8 +42,7 @@ int main(int argc, char const* argv[])
 		if ((side_white = nt.InitSocket(n_is_server, n_ip)) == SOCKET_ERROR)
 		{
 			std::cout << "Network service: Connection proccess has failured, abort\n";
-			system("pause");
-			return 0;
+			goto exit;
 		}
 		std::cout << "Connected\n";
 	}
@@ -99,6 +96,7 @@ int main(int argc, char const* argv[])
 	else
 		std::cout << "Game was aborted!\n";
 
+exit:
 	system("pause");
 	return 0;
 }
