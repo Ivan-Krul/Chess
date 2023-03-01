@@ -18,6 +18,19 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Board.cpp" />
+    <ClCompile Include="MoveController.cpp" />
+    <ClCompile Include="MoveGenerator.cpp" />
+    <ClCompile Include="MovePusher.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Board.h" />
+    <ClInclude Include="MoveController.h" />
+    <ClInclude Include="MoveGenerator.h" />
+    <ClInclude Include="MovePusher.h" />
+    <ClInclude Include="Tile.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -126,19 +139,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\Chess\Board.h" />
-    <ClInclude Include="..\Chess\MoveController.h" />
-    <ClInclude Include="..\Chess\MoveGenerator.h" />
-    <ClInclude Include="..\Chess\MovePusher.h" />
-    <ClInclude Include="..\Chess\Tile.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Chess\Board.cpp" />
-    <ClCompile Include="..\Chess\MoveController.cpp" />
-    <ClCompile Include="..\Chess\MoveGenerator.cpp" />
-    <ClCompile Include="..\Chess\MovePusher.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -167,11 +167,12 @@ namespace chess_lib
 		auto points = 0;
 		auto x = int8_t(0);
 
-		auto get_king_pos =  uint8_t(is_white_turn ? 60 : 4);
+		const auto get_king_pos =  uint8_t(is_white_turn ? 60 : 4);
 
-		for (uint8_t t = 0; t != 2; t++)
+		for (uint8_t t = 0; t < 2; t++)
 		{
-			if (t == 0)
+			// getting state
+			if (t)
 			{
 				if (is_white_turn)
 					state = caslstates.wk;
@@ -185,25 +186,38 @@ namespace chess_lib
 				else
 					state = caslstates.bq;
 			}
+
+			// checking for opportunity
 			if (!state)
 				continue;
+
+			// counting a reasons for castling
+			// first checking king's movement
 			points = 0;
-			for (x = (t == 0 ? 1 : -1); abs(x) < 3; x += (t == 0 ? 1 : -1))
+			for (int8_t i = (t ? 1 : -1); abs(i) < 3; i += (t ? 1 : -1))
 			{
-				
 				auto cpy = p_board;
-				cpy.ForcedMove(Move{ get_king_pos, uint8_t(get_king_pos + x) });
-				auto mg = MoveGenerator();
-				if (!mg.CanKingBeInCheck(p_board, is_white_turn))
+				cpy.ForcedMove(Move{ get_king_pos, uint8_t(get_king_pos + i) });
+				if (!CanKingBeInCheck(cpy, is_white_turn))
 					points++;
-				if (abs(x + (t == 0 ? 1 : -1)) == 3)
-					break;
-			}
-			for (int8_t f = (t == 0 ? 1 : -1); abs(f) < 3 + t; f += (t == 0 ? 1 : -1))
-				points += (p_board.GetBoard()[get_king_pos + f].side == SideType::none);
+			} // at result, if all conditions is perfect, [points] would be equal 2
+
+			// second checking for empty space
+			for (int8_t i = (t ? 1 : -1); abs(i) < 3 + t; i += (t ? 1 : -1))
+			{
+				if (p_board.GetBoard()[get_king_pos + i].side == SideType::none)
+					points++;
+			} // at result, if all conditions is perfect, [points] would be equal 4 - 5
+
+			printf("\nD: %d\n", points);
+
+			// making decision of castling move
 			if (points == 4 + t)
-				moves.push_back(Move{ get_king_pos, uint8_t(get_king_pos + x) });
+				moves.push_back(Move{get_king_pos, uint8_t(get_king_pos + (t == 0 ? 2 : -2))});
 		}
+
+		for (auto& m : moves)
+			printf("\nD: %s -> %s\n", p_board.ConvertFromIndex(m.GetP1()).c_str(), p_board.ConvertFromIndex(m.GetP2()).c_str());
 
 		return moves;
 	}
