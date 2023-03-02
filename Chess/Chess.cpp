@@ -1,12 +1,15 @@
 #include <iostream>
 
-#include "ConRenderer.h"
-#include "MoveController.h"
-#include "TypeInterface.h"
-#include "NetworkTeller.h"
+//#include "ConRenderer.h"
+//#include "MoveController.h"
+//#include "TypeInterface.h"
+//#include "NetworkTeller.h"
+
+#include "LoaderModel.h"
 
 int main(int argc, char const* argv[])
 {
+	/*
 	auto n_booter = network_lib::Booter::GetInstance();
 
 	if (n_booter.Init() != 0)
@@ -98,6 +101,17 @@ int main(int argc, char const* argv[])
 		std::cout << "Draw!\n";
 	else
 		std::cout << "Game was aborted!\n";
+	*/
+
+	glerka_lib::LoaderModel lm;
+	lm.Load();
+
+	auto p = lm.getPiece(chess_lib::PieceType::rook);
+
+	for (auto& c : p)
+	{
+		std::cout << "P: " << c << '\n';
+	}
 
 	system("pause");
 	return 0;

@@ -19,11 +19,41 @@ namespace glerka_lib
 			return;
 		}
 
-		bool breakpoints[6];
+		printf("Load\n");
 
-		while (fin)
+		bool breakpoints[6] = { false, false, false, false, false, false };
+		auto statement = 0;
+		auto str = std::string();
+		auto is_break = true;
+
+		while (fin >> str)
 		{
+			if (str == "pawn")
+				statement = 0;
+			else if (str == "rook")
+				statement = 1;
+			else if (str == "knight")
+				statement = 2;
+			else if (str == "bishop")
+				statement = 3;
+			else if (str == "queen")
+				statement = 4;
+			else if (str == "king")
+				statement = 5;
+			else if (str == "end")
+				breakpoints[statement] = true;
+			else
+				m_Models[statement].push_back(std::stof(str));
 
+			for (auto& bp : breakpoints)
+			{
+				if (bp)
+					continue;
+				is_break = false;
+				break;
+			}
+			if (is_break)
+				break;
 		}
 
 		fin.close();
