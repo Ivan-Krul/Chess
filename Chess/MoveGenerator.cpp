@@ -91,9 +91,16 @@ namespace chess_lib
 		return f_GenerateLineMoves(p_board, position, { {2,1},{2,-1},{-1,2},{1,2},{-2,1},{-2,-1},{-1,-2},{1,-2} }, false, only_enemy);
 	}
 
-	std::vector<Move> MoveGenerator::GenerateKingMove(const Board& p_board, const uint8_t position, bool only_enemy) const
+	std::vector<Move> MoveGenerator::GenerateKingMove(const Board& p_board, const uint8_t position, bool only_enemy, bool only_moves) const
 	{
-		return f_GenerateLineMoves(p_board, position, { {1,1},{-1,1},{-1,-1},{1,-1},{1,0},{0,1},{-1,0},{0,-1} }, false, only_enemy);
+		auto moves = f_GenerateLineMoves(p_board, position, { {1,1},{-1,1},{-1,-1},{1,-1},{1,0},{0,1},{-1,0},{0,-1} }, false, only_enemy);
+		if (only_moves)
+		{
+			auto castling = GenerateCastlings(p_board, p_board.GetIsWhiteMove());
+			for (auto& c : castling)
+				moves.push_back(c);
+		}
+		return moves;
 	}
 
 	std::vector<Move> MoveGenerator::GeneratePawnMove(const Board& p_board, const uint8_t position, bool only_enemy) const
@@ -158,7 +165,7 @@ namespace chess_lib
 
 	std::vector<Move> MoveGenerator::GenerateCastlings(const Board& p_board, const bool is_white_turn) const
 	{
-		if(CanKingBeInCheck(p_board, is_white_turn))
+		if (CanKingBeInCheck(p_board, is_white_turn))
 			return std::vector<Move>();
 
 		auto caslstates = p_board.GetCastlingState();
@@ -167,11 +174,13 @@ namespace chess_lib
 		auto points = 0;
 		auto x = int8_t(0);
 
-		auto get_king_pos =  uint8_t(is_white_turn ? 60 : 4);
+		const auto get_king_pos = uint8_t(is_white_turn ? 60 : 4);
 
-		for (uint8_t t = 0; t != 2; t++)
+		for (uint8_t t = 0; t < 2; t++)
 		{
-			if (t == 0)
+			const auto delta = t == 0 ? 1 : -1;
+			// getting state
+			if (!t)
 			{
 				if (is_white_turn)
 					state = caslstates.wk;
@@ -185,24 +194,35 @@ namespace chess_lib
 				else
 					state = caslstates.bq;
 			}
+
+			// checking for opportunity
 			if (!state)
 				continue;
+
+			// counting a reasons for castling
+			// first checking king's movement
 			points = 0;
-			for (x = (t == 0 ? 1 : -1); abs(x) < 3; x += (t == 0 ? 1 : -1))
+			for (int8_t i = delta; abs(i) < 3; i += delta)
 			{
-				
 				auto cpy = p_board;
-				cpy.ForcedMove(Move{ get_king_pos, uint8_t(get_king_pos + x) });
-				auto mg = MoveGenerator();
-				if (!mg.CanKingBeInCheck(p_board, is_white_turn))
+				cpy.ForcedMove(Move{ get_king_pos, uint8_t(get_king_pos + i) });
+				if (!CanKingBeInCheck(cpy, is_white_turn))
 					points++;
-				if (abs(x + (t == 0 ? 1 : -1)) == 3)
-					break;
-			}
-			for (int8_t f = (t == 0 ? 1 : -1); abs(f) < 3 + t; f += (t == 0 ? 1 : -1))
-				points += (p_board.GetBoard()[get_king_pos + f].side == SideType::none);
+			} // at result, if all conditions is perfect, [points] would be equal 2
+
+			// second checking for empty space
+			for (int8_t i = delta; abs(i) < 3 + t; i += delta)
+			{
+				printf("\nD: %s\n", p_board.ConvertFromIndex(get_king_pos + i).c_str());
+				if (p_board.GetBoard()[get_king_pos + i].side == SideType::none)
+				{
+					points++;
+				}
+			} // at result, if all conditions is perfect, [points] would be equal 4 - 5
+
+			// making decision of castling move
 			if (points == 4 + t)
-				moves.push_back(Move{ get_king_pos, uint8_t(get_king_pos + x) });
+				moves.push_back(Move{ get_king_pos, uint8_t(get_king_pos + delta * 2) });
 		}
 
 		return moves;
@@ -222,7 +242,7 @@ namespace chess_lib
 		auto enemy_list_bishop = GenerateBishopMove(p_board, king_index, true);
 		auto enemy_list_knight = GenerateKnightMove(p_board, king_index, true);
 		auto enemy_list_pawn = f_GeneratePawnAttackMoves(p_board, king_index, true);
-		auto enemy_list_king = GenerateKingMove(p_board, king_index, true);
+		auto enemy_list_king = GenerateKingMove(p_board, king_index, true, false);
 		auto enemy_list_queen = GenerateQueenMove(p_board, king_index, true);
 
 		for (auto move : enemy_list_knight)

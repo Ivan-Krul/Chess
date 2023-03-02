@@ -12,7 +12,7 @@ namespace chess_lib
 		std::vector<Move> GenerateBishopMove(const Board& p_board, const uint8_t position, bool only_enemy = false) const;
 		std::vector<Move> GenerateQueenMove(const Board& p_board, const uint8_t position, bool only_enemy = false) const;
 		std::vector<Move> GenerateKnightMove(const Board& p_board, const uint8_t position, bool only_enemy = false) const;
-		std::vector<Move> GenerateKingMove(const Board& p_board, const uint8_t position, bool only_enemy = false) const;
+		std::vector<Move> GenerateKingMove(const Board& p_board, const uint8_t position, bool only_enemy = false, bool only_moves = true) const;
 		std::vector<Move> GeneratePawnMove(const Board& p_board, const uint8_t position, bool only_enemy = false) const;
 
 		std::vector<Move> GenerateCastlings(const Board& p_board, const bool is_white_turn) const;
