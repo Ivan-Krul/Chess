@@ -213,7 +213,6 @@ namespace chess_lib
 			// second checking for empty space
 			for (int8_t i = delta; abs(i) < 3 + t; i += delta)
 			{
-				printf("\nD: %s\n", p_board.ConvertFromIndex(get_king_pos + i).c_str());
 				if (p_board.GetBoard()[get_king_pos + i].side == SideType::none)
 				{
 					points++;
