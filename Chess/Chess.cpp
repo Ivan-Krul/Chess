@@ -6,6 +6,7 @@
 //#include "NetworkTeller.h"
 
 #include "LoaderModel.h"
+#include "LoaderColor.h"
 
 int main(int argc, char const* argv[])
 {
@@ -104,9 +105,14 @@ int main(int argc, char const* argv[])
 	*/
 
 	glerka_lib::LoaderModel lm;
+	glerka_lib::LoaderColor lc;
+	lc.Load();
 	lm.Load();
 
+	auto c = lc.getSelected(false);
 	auto p = lm.getPiece(chess_lib::PieceType::rook);
+
+	std::cout << "C: " << (int)c.r << ", " << (int)c.g << ", " << (int)c.b << '\n';
 
 	for (auto& c : p)
 	{

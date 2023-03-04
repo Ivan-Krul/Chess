@@ -143,9 +143,11 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="LoaderColor.h" />
     <ClInclude Include="LoaderModel.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="LoaderColor.cpp" />
     <ClCompile Include="LoaderModel.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -14,7 +14,7 @@ namespace glerka_lib
 		void Load();
 		std::vector<float> getPiece(chess_lib::PieceType type);
 	private:
-		const std::string c_Directory = "D:\\Progect\\Visual Studio 2022\\Chess\\Debug\\models.dat";
+		const std::string c_Directory = "./chess.dat";
 
 		const std::array<std::vector<float>, 6> c_StandModels = 
 		{
