@@ -5,8 +5,9 @@
 //#include "TypeInterface.h"
 //#include "NetworkTeller.h"
 
-#include "LoaderModel.h"
-#include "LoaderColor.h"
+#pragma comment(lib, "opengl32.lib")
+#include <GLFW/glfw3.h>
+#include "Renderer.h"
 
 int main(int argc, char const* argv[])
 {
@@ -104,21 +105,47 @@ int main(int argc, char const* argv[])
 		std::cout << "Game was aborted!\n";
 	*/
 
-	glerka_lib::LoaderModel lm;
-	glerka_lib::LoaderColor lc;
-	lc.Load();
-	lm.Load();
+	GLFWwindow* window;
 
-	auto c = lc.getSelected(false);
-	auto p = lm.getPiece(chess_lib::PieceType::rook);
+	/* Initialize the library */
+	if (!glfwInit())
+		return -1;
 
-	std::cout << "C: " << (int)c.r << ", " << (int)c.g << ", " << (int)c.b << '\n';
-
-	for (auto& c : p)
+	/* Create a windowed mode window and its OpenGL context */
+	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+	if (!window)
 	{
-		std::cout << "P: " << c << '\n';
+		glfwTerminate();
+		return -1;
 	}
 
-	system("pause");
+	/* Make the window's context current */
+	glfwMakeContextCurrent(window);
+
+	/* Loop until the user closes the window */
+	while (!glfwWindowShouldClose(window))
+	{
+		/* Render here */
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glRotatef(1.0f, 0.0f, 0.0f, 1.0f);
+
+		glBegin(GL_TRIANGLES);
+		glColor3f(1.0f, 0.0f, 0.0f);
+		glVertex2f(-0.5f, -0.5f);
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glVertex2f(0.0f, 0.5f);
+		glColor3f(0.0f, 0.0f, 1.0f);
+		glVertex2f(0.5f, -0.5f);
+		glEnd();
+
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
+
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
+
+	glfwTerminate();
 	return 0;
 }
