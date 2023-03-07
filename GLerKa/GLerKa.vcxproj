@@ -145,10 +145,12 @@
   <ItemGroup>
     <ClInclude Include="LoaderColor.h" />
     <ClInclude Include="LoaderModel.h" />
+    <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LoaderColor.cpp" />
     <ClCompile Include="LoaderModel.cpp" />
+    <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ChessCore\ChessCore.vcxproj">

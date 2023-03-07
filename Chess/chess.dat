@@ -49,22 +49,22 @@ model
     end
 end
 color
-    board_w
-        221
-        221
-        221
-    end
-    board_b
-        34
-        34
-        34
-    end
     piece_w
+        221
+        221
+        221
+    end
+    piece_b
+        34
+        34
+        34
+    end
+    board_w
         232
         167
         120
     end
-    piece_b
+    board_b
         108
         57
         20

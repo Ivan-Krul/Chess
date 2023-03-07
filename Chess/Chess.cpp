@@ -8,6 +8,7 @@
 #pragma comment(lib, "opengl32.lib")
 #include <GLFW/glfw3.h>
 #include "Renderer.h"
+#include "Renderer.cpp"
 
 int main(int argc, char const* argv[])
 {
@@ -105,6 +106,9 @@ int main(int argc, char const* argv[])
 		std::cout << "Game was aborted!\n";
 	*/
 
+	chess_lib::Board b;
+	glerka_lib::Renderer r;
+
 	GLFWwindow* window;
 
 	/* Initialize the library */
@@ -128,16 +132,7 @@ int main(int argc, char const* argv[])
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glRotatef(1.0f, 0.0f, 0.0f, 1.0f);
-
-		glBegin(GL_TRIANGLES);
-		glColor3f(1.0f, 0.0f, 0.0f);
-		glVertex2f(-0.5f, -0.5f);
-		glColor3f(0.0f, 1.0f, 0.0f);
-		glVertex2f(0.0f, 0.5f);
-		glColor3f(0.0f, 0.0f, 1.0f);
-		glVertex2f(0.5f, -0.5f);
-		glEnd();
+		r.RenderBoard(b);
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
