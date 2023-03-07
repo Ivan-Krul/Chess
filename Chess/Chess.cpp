@@ -1,7 +1,7 @@
 #include <iostream>
 
 //#include "ConRenderer.h"
-//#include "MoveController.h"
+#include "MoveController.h"
 //#include "TypeInterface.h"
 //#include "NetworkTeller.h"
 
@@ -106,8 +106,25 @@ int main(int argc, char const* argv[])
 		std::cout << "Game was aborted!\n";
 	*/
 
+	/*auto mc = chess_lib::MoveController::GetInstance();
+	auto r = ConRenderer();
+	auto board = chess_lib::Board();
+
+	while ((!mc.IsMate(board) && !mc.IsStalemate(board) && !mc.IsDraw(board)))
+	{
+		std::cout << r.Render(board, board.GetIsWhiteMove());
+		TypeInterface::FormQuire(board);
+	}
+
+	if (mc.IsMate(board))
+		std::cout << "Mate!\n" << (!board.GetIsWhiteMove() ? "White" : "Black") << " wins\n";
+	else if (mc.IsStalemate(board))
+		std::cout << "Stalemate!\nDraw\n";
+	else
+		std::cout << "Draw!\n";
+	*/
 	chess_lib::Board b;
-	glerka_lib::Renderer r;
+	glerka_lib::Renderer r(640, 480);
 
 	GLFWwindow* window;
 
@@ -138,7 +155,17 @@ int main(int argc, char const* argv[])
 		glfwSwapBuffers(window);
 
 		/* Poll for and process events */
+
+		glfwSetCursorPosCallback(window, (GLFWcursorposfun)glerka_lib::Renderer::HandleCursor);
+
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+		{
+			std::cout << "Click!\n";
+		}
+
 		glfwPollEvents();
+		glfwSetFramebufferSizeCallback(window, glerka_lib::Renderer::HandleResize);
+		glViewport(0, 0, r.GetWidth(), r.GetHeight());
 	}
 
 	glfwTerminate();

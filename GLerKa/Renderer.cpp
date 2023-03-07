@@ -2,10 +2,14 @@
 
 namespace glerka_lib
 {
-	Renderer::Renderer()
+	Renderer::Renderer(int width, int height)
 	{
 		m_lc.Load();
 		m_lm.Load();
+		m_CWidthPx = width;
+		m_CHeightPx = height;
+		m_WidthPx = width;
+		m_HeightPx = height;
 	}
 
 	void Renderer::RenderUnPushedSquare(const chess_lib::Board& board, const uint8_t index)
@@ -36,10 +40,9 @@ namespace glerka_lib
 
 	void Renderer::RenderBoard(const chess_lib::Board& board)
 	{
-		float scale = 1.0f;
 		glLoadIdentity();
 		glTranslatef(-1.0f, -1.0f, 0.0f);
-		glScalef(2.0f / 8.0f * scale, 2.0f / 8.0f * scale, 1.0f);
+		glScalef(2.0f / 8.0f, 2.0f / 8.0f, 1.0f);
 		for (uint8_t x = 0; x < 8; x++)
 		{
 			for (uint8_t y = 0; y < 8; y++)
@@ -51,4 +54,43 @@ namespace glerka_lib
 			}
 		}
 	}
+
+	void Renderer::HandleResize(GLFWwindow* window, int width, int height)
+	{
+		m_WidthPx = width;
+		m_HeightPx = height;
+	}
+
+	void Renderer::HandleCursor(GLFWwindow* window, double width, double height)
+	{
+		m_CurPosX = width;
+		m_CurPosY = height;
+	}
+
+	int Renderer::GetWidth() const
+	{
+		return m_WidthPx;
+	}
+
+	int Renderer::GetHeight() const
+	{
+		return m_HeightPx;
+	}
+
+	double Renderer::GetCurPosX() const
+	{
+		return m_CurPosX / (double)m_WidthPx;
+	}
+
+	double Renderer::GetCurPosY() const
+	{
+		return m_CurPosY / (double)m_HeightPx;
+	}
+
+	int Renderer::m_CWidthPx = 1;
+	int Renderer::m_CHeightPx = 1;
+	int Renderer::m_WidthPx = 1;
+	int Renderer::m_HeightPx = 1;
+	double Renderer::m_CurPosX = 1;
+	double Renderer::m_CurPosY = 1;
 }

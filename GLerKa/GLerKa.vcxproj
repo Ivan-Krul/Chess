@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Depencies.h" />
     <ClInclude Include="LoaderColor.h" />
     <ClInclude Include="LoaderModel.h" />
     <ClInclude Include="Renderer.h" />
