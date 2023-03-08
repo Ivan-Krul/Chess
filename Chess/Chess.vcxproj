@@ -139,6 +139,7 @@
     <ClCompile Include="ConRenderer.cpp" />
     <ClCompile Include="NetworkTeller.cpp" />
     <ClCompile Include="TypeInterface.cpp" />
+    <ClCompile Include="WinInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ChessCore\ChessCore.vcxproj">
@@ -155,6 +156,7 @@
     <ClInclude Include="ConRenderer.h" />
     <ClInclude Include="NetworkTeller.h" />
     <ClInclude Include="TypeInterface.h" />
+    <ClInclude Include="WinInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

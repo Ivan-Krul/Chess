@@ -5,8 +5,7 @@
 //#include "TypeInterface.h"
 //#include "NetworkTeller.h"
 
-#pragma comment(lib, "opengl32.lib")
-#include <GLFW/glfw3.h>
+#include "WinInterface.h"
 #include "Renderer.h"
 #include "Renderer.cpp"
 
