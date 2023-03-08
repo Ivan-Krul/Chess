@@ -78,7 +78,7 @@ namespace chess_lib
 		static auto our_pieces = std::vector<uint8_t>();
 		static auto our_side = board.GetIsWhiteMove() ? SideType::white : SideType::black;
 
-		if (!mg.CanKingBeInCheck(board, board.GetIsWhiteMove()))
+		if (!mg.CanKingBeInCheck(board, !board.GetIsWhiteMove()))
 			return false;
 
 		our_side = board.GetIsWhiteMove() ? SideType::white : SideType::black;
