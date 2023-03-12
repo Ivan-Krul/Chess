@@ -5,7 +5,7 @@
 //#include "TypeInterface.h"
 //#include "NetworkTeller.h"
 
-#include "WinInterface.h"
+//#include "WinInterface.h"
 #include "Renderer.h"
 #include "Renderer.cpp"
 
@@ -148,7 +148,8 @@ int main(int argc, char const* argv[])
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		r.RenderBoard(b);
+		r.RenderBoard(b, b.GetIsWhiteMove());
+		r.HandleClick(window, b);
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
@@ -156,12 +157,6 @@ int main(int argc, char const* argv[])
 		/* Poll for and process events */
 
 		glfwSetCursorPosCallback(window, (GLFWcursorposfun)glerka_lib::Renderer::HandleCursor);
-
-		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-		{
-			std::cout << "Click!\n";
-		}
-
 		glfwPollEvents();
 		glfwSetFramebufferSizeCallback(window, glerka_lib::Renderer::HandleResize);
 		glViewport(0, 0, r.GetWidth(), r.GetHeight());

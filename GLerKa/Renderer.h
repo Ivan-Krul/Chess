@@ -4,12 +4,28 @@
 #include "LoaderColor.h"
 #include "LoaderModel.h"
 
-#include "Board.h"
+#include "MoveController.h"
+
+#include <chrono>
+#include <thread>
 
 namespace glerka_lib
 {
 	class Renderer
 	{
+	public:
+		Renderer(int width, int height);
+		void RenderUnPushedSquare(const chess_lib::Board& board, const uint8_t index, const bool is_selected);
+		void RenderBoard(const chess_lib::Board& board, const bool is_white_side = true);
+		static void HandleResize(GLFWwindow* window, int width, int height);
+		static void HandleCursor(GLFWwindow* window, double width, double height);
+		void HandleClick(GLFWwindow* window, const chess_lib::Board& board);
+
+		int GetWidth() const;
+		int GetHeight() const;
+		double GetCurPosX() const;
+		double GetCurPosY() const;
+	private:
 		static int m_CWidthPx;
 		static int m_CHeightPx;
 		static int m_WidthPx;
@@ -17,19 +33,14 @@ namespace glerka_lib
 
 		static double m_CurPosX;
 		static double m_CurPosY;
-	public:
-		Renderer(int width, int height);
-		void RenderUnPushedSquare(const chess_lib::Board& board, const uint8_t index);
-		void RenderBoard(const chess_lib::Board& board);
-		static void HandleResize(GLFWwindow* window, int width, int height);
-		static void HandleCursor(GLFWwindow* window, double width, double height);
 
-		int GetWidth() const;
-		int GetHeight() const;
-		double GetCurPosX() const;
-		double GetCurPosY() const;
-	private:
+		bool m_IsSwapedN = false;
+
+		int8_t m_ClickCoord;
+
 		LoaderModel m_lm;
 		LoaderColor m_lc;
+
+		uint8_t GetCurPos(const bool is_white);
 	};
 }

@@ -27,9 +27,6 @@
     <ClCompile Include="NetworkTeller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WinInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConRenderer.h">
@@ -39,9 +36,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="NetworkTeller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WinInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
