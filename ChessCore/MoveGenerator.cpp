@@ -58,15 +58,14 @@ namespace chess_lib
 		auto opposite_piece = [=]() {return is_white_move ? SideType::black : SideType::white; };
 		auto delta_pos = [=](int8_t x, int8_t y) {return pos{ int8_t(posit.x + x) , int8_t(posit.y + y) }; };
 
-		auto del_pos = delta_pos(0, opposite_delta_side(1));
+		auto del_pos = delta_pos(0, opposite_delta_side(-1));
 
 		for (int8_t i = -1; i < 2; i += 2)
 		{
-			del_pos = delta_pos(i, opposite_delta_side(1));
+			del_pos.x = posit.x + i;
 			if (!is_in_map(del_pos))
 				continue;
-			if (arr[to_ind(del_pos)].side == opposite_piece())
-				moves.push_back(constr(to_ind(del_pos)));
+			moves.push_back(constr(to_ind(del_pos)));
 		}
 		return moves;
 	}
@@ -175,6 +174,7 @@ namespace chess_lib
 		auto x = int8_t(0);
 
 		const auto get_king_pos = uint8_t(is_white_turn ? 60 : 4);
+		const auto get_king_tile = p_board.GetBoard()[get_king_pos];
 
 		for (uint8_t t = 0; t < 2; t++)
 		{
@@ -213,11 +213,15 @@ namespace chess_lib
 			// second checking for empty space
 			for (int8_t i = delta; abs(i) < 3 + t; i += delta)
 			{
-				if (p_board.GetBoard()[get_king_pos + i].side == SideType::none)
+				if (get_king_tile.side == SideType::none)
 				{
 					points++;
 				}
 			} // at result, if all conditions is perfect, [points] would be equal 4 - 5
+
+			// at last, checking for having rook
+			if (p_board.GetBoard()[get_king_pos + delta * 3 - t].side == get_king_tile.side && p_board.GetBoard()[get_king_pos + delta * 3 - t].type == PieceType::rook)
+				points++;
 
 			// making decision of castling move
 			if (points == 4 + t)
@@ -245,7 +249,7 @@ namespace chess_lib
 		auto enemy_list_queen = GenerateQueenMove(p_board, king_index, true);
 
 		for (auto move : enemy_list_knight)
-			if (arr[move.GetP2()].type == PieceType::knight && arr[move.GetP2()].side != side(is_white_turn))
+			if (arr[move.GetP2()].type == PieceType::knight && arr[move.GetP2()].side == side(is_white_turn))
 				return true;
 		for (auto move : enemy_list_rook)
 			if (arr[move.GetP2()].type == PieceType::rook && arr[move.GetP2()].side == side(is_white_turn))
