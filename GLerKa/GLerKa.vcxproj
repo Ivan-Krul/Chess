@@ -147,6 +147,7 @@
     <ClInclude Include="LoaderColor.h" />
     <ClInclude Include="LoaderModel.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="SegmentLineRender.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LoaderColor.cpp" />

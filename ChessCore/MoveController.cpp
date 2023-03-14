@@ -150,6 +150,9 @@ namespace chess_lib
 				bpos.push_back(i);
 		}
 
+		if (wpos.size() == 1 && bpos.size() == bpos.size())
+			return true;
+
 		static auto wpieces = std::vector<PieceType>();
 		static auto bpieces = std::vector<PieceType>();
 
@@ -164,8 +167,7 @@ namespace chess_lib
 		for (const auto& p : bpos)
 			bpieces.push_back(board.GetBoard()[p].type);
 
-		if (wpieces.size() == 1 && bpieces.size() == wpieces.size())
-			return true;
+		
 
 		for (const auto& t : wpieces)
 			wcount[uint8_t(t)]++;

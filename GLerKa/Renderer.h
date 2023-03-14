@@ -6,6 +6,8 @@
 
 #include "MoveController.h"
 
+#include "SegmentLineRender.h"
+
 #include <chrono>
 #include <thread>
 
@@ -20,6 +22,10 @@ namespace glerka_lib
 		static void HandleResize(GLFWwindow* window, int width, int height);
 		static void HandleCursor(GLFWwindow* window, double width, double height);
 		void HandleClick(GLFWwindow* window, const chess_lib::Board& board);
+		void HandlePromotion(GLFWwindow* window, chess_lib::Board& board);
+		void HandleMate(GLFWwindow* window, const chess_lib::Board& board);
+		void HandleDraw(GLFWwindow* window, const chess_lib::Board& board);
+		void HandleStalemate(GLFWwindow* window, const chess_lib::Board& board);
 
 		int GetWidth() const;
 		int GetHeight() const;

@@ -51,7 +51,7 @@ namespace glerka_lib
 		m_IsSwapedN = is_white_side;
 
 		auto selected = std::vector<chess_lib::Move>();
-		auto conv_to_index = [=](uint8_t x, uint8_t y) {return x + y * 8;  };
+		auto conv_to_index = [=](uint8_t x, uint8_t y) { return x + y * 8; };
 		unsigned cur_coord = conv_to_index((is_white_side ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0))), (is_white_side ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0))));
 		//auto norm_predict = [=](uint8_t x, uint8_t y) { return (is_white_side ? (x + (7 - y) * 8) : ((7 - x) + y * 8)); };
 
@@ -142,6 +142,67 @@ namespace glerka_lib
 
 			m_ClickCoord = -1;
 		}
+	}
+
+	void Renderer::HandlePromotion(GLFWwindow* window, chess_lib::Board& board)
+	{
+		auto& mc = chess_lib::MoveController::GetInstance();
+		if (!mc.NeedPromotion(board))
+			return;
+
+		// render message
+		glTranslatef(0.0f, 6.0f, 0.0f);
+		RenderWord("promotion", { 255,0,0 }, 5.0f);
+		glTranslatef(0.0f, -1.0f, 0.0f);
+		RenderWord("press key:", { 255,0,0 }, 5.0f);
+		glTranslatef(0.0f, -1.0f, 0.0f);
+		RenderWord("Q - queen", { 255,0,0 }, 5.0f);
+		glTranslatef(0.0f, -1.0f, 0.0f);
+		RenderWord("N - knight", { 255,0,0 }, 5.0f);
+		glTranslatef(0.0f, -1.0f, 0.0f);
+		RenderWord("R - rool", { 255,0,0 }, 5.0f);
+		glTranslatef(0.0f, -1.0f, 0.0f);
+		RenderWord("B - bishop", { 255,0,0 }, 5.0f);
+
+		// checking key
+		if (glfwGetKey(window, 'Q'))
+			mc.PromoteTo(board, chess_lib::PromotionChoice::queen);
+		else if (glfwGetKey(window, 'N'))
+			mc.PromoteTo(board, chess_lib::PromotionChoice::knight);
+		else if (glfwGetKey(window, 'R'))
+			mc.PromoteTo(board, chess_lib::PromotionChoice::rook);
+		else if (glfwGetKey(window, 'B'))
+			mc.PromoteTo(board, chess_lib::PromotionChoice::bishop);
+	}
+
+	void Renderer::HandleMate(GLFWwindow* window, const chess_lib::Board& board)
+	{
+		auto& mc = chess_lib::MoveController::GetInstance();
+		if (!mc.IsMate(board))
+			return;
+
+		glTranslatef(0.0f, 6.0f, 0.0f);
+		RenderWord("mate", { 255,0,0 }, 5.0f);
+	}
+
+	void Renderer::HandleDraw(GLFWwindow* window, const chess_lib::Board& board)
+	{
+		auto& mc = chess_lib::MoveController::GetInstance();
+		if (!mc.IsDraw(board))
+			return;
+
+		glTranslatef(0.0f, 6.0f, 0.0f);
+		RenderWord("draw", { 255,0,0 }, 5.0f);
+	}
+
+	void Renderer::HandleStalemate(GLFWwindow* window, const chess_lib::Board& board)
+	{
+		auto& mc = chess_lib::MoveController::GetInstance();
+		if (!mc.IsStalemate(board))
+			return;
+
+		glTranslatef(0.0f, 6.0f, 0.0f);
+		RenderWord("stalemate", { 255,0,0 }, 5.0f);
 	}
 
 	int Renderer::GetWidth() const

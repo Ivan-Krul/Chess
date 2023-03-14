@@ -5,7 +5,6 @@
 //#include "TypeInterface.h"
 //#include "NetworkTeller.h"
 
-//#include "WinInterface.h"
 #include "Renderer.h"
 #include "Renderer.cpp"
 
@@ -122,6 +121,7 @@ int main(int argc, char const* argv[])
 	else
 		std::cout << "Draw!\n";
 	*/
+
 	chess_lib::Board b;
 	glerka_lib::Renderer r(640, 480);
 
@@ -150,6 +150,10 @@ int main(int argc, char const* argv[])
 
 		r.RenderBoard(b, b.GetIsWhiteMove());
 		r.HandleClick(window, b);
+		r.HandlePromotion(window, b);
+		r.HandleMate(window, b);
+		r.HandleStalemate(window, b);
+		r.HandleDraw(window, b);
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);

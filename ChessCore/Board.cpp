@@ -14,26 +14,26 @@ namespace chess_lib
 	Board::Board()
 	{
 		m_Board.fill({ PieceType::none, SideType::none });
-		m_Board[0] = { PieceType::rook, SideType::black };
-		m_Board[1] = { PieceType::knight, SideType::black };
-		m_Board[2] = { PieceType::bishop, SideType::black };
-		m_Board[3] = { PieceType::queen, SideType::black };
+		//m_Board[0] = { PieceType::rook, SideType::black };
+		//m_Board[1] = { PieceType::knight, SideType::black };
+		//m_Board[2] = { PieceType::bishop, SideType::black };
+		//m_Board[3] = { PieceType::queen, SideType::black };
 		m_Board[4] = { PieceType::king, SideType::black };
-		m_Board[5] = { PieceType::bishop, SideType::black };
-		m_Board[6] = { PieceType::knight, SideType::black };
-		m_Board[7] = { PieceType::rook, SideType::black };
-		auto pawn = Tile{ PieceType::pawn, SideType::black };
-		memset((&*m_Board.begin()) + 8, *(int*)&pawn, 8);
-		pawn.side = SideType::white;
-		memset((&*m_Board.rbegin()) - 15, *(int*)&pawn, 8);
+		//m_Board[5] = { PieceType::bishop, SideType::black };
+		//m_Board[6] = { PieceType::knight, SideType::black };
+		//m_Board[7] = { PieceType::rook, SideType::black };
+		//auto pawn = Tile{ PieceType::pawn, SideType::black };
+		//memset((&*m_Board.begin()) + 8, *(int*)&pawn, 8);
+		//pawn.side = SideType::white;
+		//memset((&*m_Board.rbegin()) - 15, *(int*)&pawn, 8);
 		m_Board[56] = { PieceType::rook, SideType::white };
-		m_Board[57] = { PieceType::knight, SideType::white };
-		m_Board[58] = { PieceType::bishop, SideType::white };
-		m_Board[59] = { PieceType::queen, SideType::white };
+		//m_Board[57] = { PieceType::knight, SideType::white };
+		//m_Board[58] = { PieceType::bishop, SideType::white };
+		//m_Board[59] = { PieceType::queen, SideType::white };
 		m_Board[60] = { PieceType::king, SideType::white };
-		m_Board[61] = { PieceType::bishop, SideType::white };
-		m_Board[62] = { PieceType::knight, SideType::white };
-		m_Board[63] = { PieceType::rook, SideType::white };
+		//m_Board[61] = { PieceType::bishop, SideType::white };
+		//m_Board[62] = { PieceType::knight, SideType::white };
+		//m_Board[63] = { PieceType::rook, SideType::white };
 
 		m_CastlingState = { 1,1,1,1 };
 
