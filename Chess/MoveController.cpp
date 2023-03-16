@@ -13,27 +13,27 @@ namespace chess_lib
 
 		switch (board.GetBoard()[position].type)
 		{
-			case PieceType::pawn:
-				stdmoves = mg.GeneratePawnMove(const_cast<Board&>(board), position);
-				break;
-			case PieceType::rook:
-				stdmoves = mg.GenerateRookMove(const_cast<Board&>(board), position);
-				break;
-			case PieceType::knight:
-				stdmoves = mg.GenerateKnightMove(const_cast<Board&>(board), position);
-				break;
-			case PieceType::bishop:
-				stdmoves = mg.GenerateBishopMove(const_cast<Board&>(board), position);
-				break;
-			case PieceType::queen:
-				stdmoves = mg.GenerateQueenMove(const_cast<Board&>(board), position);
-				break;
-			case PieceType::king:
-				stdmoves = mg.GenerateKingMove(const_cast<Board&>(board), position);
-				break;
+		case PieceType::pawn:
+			stdmoves = mg.GeneratePawnMove(const_cast<Board&>(board), position);
+			break;
+		case PieceType::rook:
+			stdmoves = mg.GenerateRookMove(const_cast<Board&>(board), position);
+			break;
+		case PieceType::knight:
+			stdmoves = mg.GenerateKnightMove(const_cast<Board&>(board), position);
+			break;
+		case PieceType::bishop:
+			stdmoves = mg.GenerateBishopMove(const_cast<Board&>(board), position);
+			break;
+		case PieceType::queen:
+			stdmoves = mg.GenerateQueenMove(const_cast<Board&>(board), position);
+			break;
+		case PieceType::king:
+			stdmoves = mg.GenerateKingMove(const_cast<Board&>(board), position);
+			break;
 		}
 
-		
+
 		for (stdmind = 0; stdmind < stdmoves.size(); stdmind++)
 		{
 			auto cpy = board;
@@ -56,7 +56,7 @@ namespace chess_lib
 
 		for (const auto& m : stdmoves)
 		{
-			if(m.GetP2() == move.GetP2())
+			if (m.GetP2() == move.GetP2())
 				return pusher.MovePiece(const_cast<Board&>(board), move);
 		}
 		return false;
@@ -67,7 +67,7 @@ namespace chess_lib
 		return board.NeedPromotion();
 	}
 
-	void MoveController::PromoteTo(Board& board, Board::PromotionChoice choice)
+	void MoveController::PromoteTo(Board& board, PromotionChoice choice)
 	{
 		board.ChoosePromotion(choice);
 	}
@@ -108,7 +108,7 @@ namespace chess_lib
 	bool MoveController::IsCheck(const Board& board) const
 	{
 		auto mg = MoveGenerator();
-		return mg.CanKingBeInCheck(board,!board.GetIsWhiteMove());
+		return mg.CanKingBeInCheck(board, !board.GetIsWhiteMove());
 	}
 
 	bool MoveController::IsStalemate(const Board& board) const
@@ -142,6 +142,9 @@ namespace chess_lib
 		static auto wpos = std::vector<uint8_t>();
 		static auto bpos = std::vector<uint8_t>();
 
+		wpos.clear();
+		bpos.clear();
+
 		for (uint8_t i = 0; i < board.GetBoard().size(); i++)
 		{
 			if (board.GetBoard()[i].side == SideType::white)
@@ -149,6 +152,9 @@ namespace chess_lib
 			else if (board.GetBoard()[i].side == SideType::black)
 				bpos.push_back(i);
 		}
+
+		if (wpos.size() == 1 && wpos.size() == bpos.size())
+			return true;
 
 		static auto wpieces = std::vector<PieceType>();
 		static auto bpieces = std::vector<PieceType>();
@@ -158,30 +164,28 @@ namespace chess_lib
 
 		wpieces.clear();
 		bpieces.clear();
+		wcount.fill(0);
+		bcount.fill(0);
 
 		for (const auto& p : wpos)
 			wpieces.push_back(board.GetBoard()[p].type);
 		for (const auto& p : bpos)
 			bpieces.push_back(board.GetBoard()[p].type);
 
-		if (wpieces.size() == 1 && bpieces.size() == wpieces.size())
-			return true;
-
 		for (const auto& t : wpieces)
 			wcount[uint8_t(t)]++;
-
 		for (const auto& t : bpieces)
 			bcount[uint8_t(t)]++;
-		
-		if (wcount == std::array<uint8_t, 7>{0, 0, 0, 1, 0, 0, 1} && bpieces.size() == 1)
+
+		if (wcount == std::array<uint8_t, 7>{0, 0, 0, 1, 0, 0, 1}&& bpieces.size() == 1)
 			return true;
-		else if (bcount == std::array<uint8_t, 7>{0, 0, 0, 1, 0, 0, 1} && wpieces.size() == 1)
+		else if (bcount == std::array<uint8_t, 7>{0, 0, 0, 1, 0, 0, 1}&& wpieces.size() == 1)
 			return true;
 		else if (wcount == std::array<uint8_t, 7>{0, 0, 0, 0, 1, 0, 1}&& bpieces.size() == 1)
 			return true;
 		else if (bcount == std::array<uint8_t, 7>{0, 0, 0, 0, 1, 0, 1}&& wpieces.size() == 1)
 			return true;
-		
+
 
 		return false;
 	}

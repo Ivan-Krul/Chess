@@ -201,22 +201,19 @@ namespace chess_lib
 
 			// counting a reasons for castling
 			// first checking king's movement
+			// second checking for empty space
 			points = 0;
 			for (int8_t i = delta; abs(i) < 3; i += delta)
 			{
 				auto cpy = p_board;
 				cpy.ForcedMove(Move{ get_king_pos, uint8_t(get_king_pos + i) });
-				if (!CanKingBeInCheck(cpy, is_white_turn))
+				if (!CanKingBeInCheck(cpy, !is_white_turn))
 					points++;
 			} // at result, if all conditions is perfect, [points] would be equal 2
-
-			// second checking for empty space
 			for (int8_t i = delta; abs(i) < 3 + t; i += delta)
 			{
-				if (get_king_tile.side == SideType::none)
-				{
+				if (p_board.GetBoard()[get_king_pos + i].side == SideType::none)
 					points++;
-				}
 			} // at result, if all conditions is perfect, [points] would be equal 4 - 5
 
 			// at last, checking for having rook
@@ -224,7 +221,7 @@ namespace chess_lib
 				points++;
 
 			// making decision of castling move
-			if (points == 4 + t)
+			if (points == 5 + t)
 				moves.push_back(Move{ get_king_pos, uint8_t(get_king_pos + delta * 2) });
 		}
 
