@@ -103,15 +103,12 @@ namespace glerka_lib
 	{
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS)
 			return;
-		printf("%c: ", board.GetIsWhiteMove() ? 'w' : 'b');
-		printf("click");
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 		if (m_ClickCoord == -1)
 		{
 			m_ClickCoord = GetCurPos(board.GetIsWhiteMove());
 			if (board.GetBoard()[m_ClickCoord].side != (board.GetIsWhiteMove() ? chess_lib::SideType::white : chess_lib::SideType::black))
 				m_ClickCoord = -1;
-			printf(" {%d}\n", m_ClickCoord);
 		}
 		else
 		{
@@ -123,7 +120,6 @@ namespace glerka_lib
 			if (board.GetBoard()[click_coord].side == (board.GetIsWhiteMove() ? chess_lib::SideType::white : chess_lib::SideType::black))
 			{
 				m_ClickCoord = click_coord;
-				printf(" {%d}\n", m_ClickCoord);
 				return;
 			}
 
@@ -137,8 +133,6 @@ namespace glerka_lib
 					break;
 				}
 			}
-
-			printf(" {%d, %d}\n", m_ClickCoord, click_coord);
 
 			m_ClickCoord = -1;
 		}
