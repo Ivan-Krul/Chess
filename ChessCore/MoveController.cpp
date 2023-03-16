@@ -142,6 +142,9 @@ namespace chess_lib
 		static auto wpos = std::vector<uint8_t>();
 		static auto bpos = std::vector<uint8_t>();
 
+		wpos.clear();
+		bpos.clear();
+
 		for (uint8_t i = 0; i < board.GetBoard().size(); i++)
 		{
 			if (board.GetBoard()[i].side == SideType::white)
@@ -150,7 +153,9 @@ namespace chess_lib
 				bpos.push_back(i);
 		}
 
-		if (wpos.size() == 1 && bpos.size() == bpos.size())
+		printf("w%d b%d\n", wpos.size(), bpos.size());
+
+		if (wpos.size() == 1 && wpos.size() == bpos.size())
 			return true;
 
 		static auto wpieces = std::vector<PieceType>();
@@ -161,20 +166,22 @@ namespace chess_lib
 
 		wpieces.clear();
 		bpieces.clear();
+		wcount.fill(0);
+		bcount.fill(0);
 
 		for (const auto& p : wpos)
 			wpieces.push_back(board.GetBoard()[p].type);
 		for (const auto& p : bpos)
 			bpieces.push_back(board.GetBoard()[p].type);
 
-		
-
 		for (const auto& t : wpieces)
 			wcount[uint8_t(t)]++;
-
 		for (const auto& t : bpieces)
 			bcount[uint8_t(t)]++;
 		
+		printf("W: v%d p%d r%d n%d b%d q%d k%d\n", wcount[0],wcount[1],wcount[2],wcount[3],wcount[4],wcount[5],wcount[6]);
+		printf("B: v%d p%d r%d n%d b%d q%d k%d\n", bcount[0],bcount[1],bcount[2],bcount[3],bcount[4],bcount[5],bcount[6]);
+
 		if (wcount == std::array<uint8_t, 7>{0, 0, 0, 1, 0, 0, 1} && bpieces.size() == 1)
 			return true;
 		else if (bcount == std::array<uint8_t, 7>{0, 0, 0, 1, 0, 0, 1} && wpieces.size() == 1)
