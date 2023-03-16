@@ -192,7 +192,3 @@ namespace chess_lib
 
 	MoveController MoveController::m_Instance;
 }
-
-
-	MoveController MoveController::m_Instance;
-}
