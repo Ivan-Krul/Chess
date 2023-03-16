@@ -13,27 +13,27 @@ namespace chess_lib
 
 		switch (board.GetBoard()[position].type)
 		{
-		case PieceType::pawn:
-			stdmoves = mg.GeneratePawnMove(const_cast<Board&>(board), position);
-			break;
-		case PieceType::rook:
-			stdmoves = mg.GenerateRookMove(const_cast<Board&>(board), position);
-			break;
-		case PieceType::knight:
-			stdmoves = mg.GenerateKnightMove(const_cast<Board&>(board), position);
-			break;
-		case PieceType::bishop:
-			stdmoves = mg.GenerateBishopMove(const_cast<Board&>(board), position);
-			break;
-		case PieceType::queen:
-			stdmoves = mg.GenerateQueenMove(const_cast<Board&>(board), position);
-			break;
-		case PieceType::king:
-			stdmoves = mg.GenerateKingMove(const_cast<Board&>(board), position);
-			break;
+			case PieceType::pawn:
+				stdmoves = mg.GeneratePawnMove(const_cast<Board&>(board), position);
+				break;
+			case PieceType::rook:
+				stdmoves = mg.GenerateRookMove(const_cast<Board&>(board), position);
+				break;
+			case PieceType::knight:
+				stdmoves = mg.GenerateKnightMove(const_cast<Board&>(board), position);
+				break;
+			case PieceType::bishop:
+				stdmoves = mg.GenerateBishopMove(const_cast<Board&>(board), position);
+				break;
+			case PieceType::queen:
+				stdmoves = mg.GenerateQueenMove(const_cast<Board&>(board), position);
+				break;
+			case PieceType::king:
+				stdmoves = mg.GenerateKingMove(const_cast<Board&>(board), position);
+				break;
 		}
 
-
+		
 		for (stdmind = 0; stdmind < stdmoves.size(); stdmind++)
 		{
 			auto cpy = board;
@@ -56,7 +56,7 @@ namespace chess_lib
 
 		for (const auto& m : stdmoves)
 		{
-			if (m.GetP2() == move.GetP2())
+			if(m.GetP2() == move.GetP2())
 				return pusher.MovePiece(const_cast<Board&>(board), move);
 		}
 		return false;
@@ -67,7 +67,7 @@ namespace chess_lib
 		return board.NeedPromotion();
 	}
 
-	void MoveController::PromoteTo(Board& board, PromotionChoice choice)
+	void MoveController::PromoteTo(Board& board, Board::PromotionChoice choice)
 	{
 		board.ChoosePromotion(choice);
 	}
@@ -108,7 +108,7 @@ namespace chess_lib
 	bool MoveController::IsCheck(const Board& board) const
 	{
 		auto mg = MoveGenerator();
-		return mg.CanKingBeInCheck(board, !board.GetIsWhiteMove());
+		return mg.CanKingBeInCheck(board,!board.GetIsWhiteMove());
 	}
 
 	bool MoveController::IsStalemate(const Board& board) const
@@ -189,6 +189,10 @@ namespace chess_lib
 
 		return false;
 	}
+
+	MoveController MoveController::m_Instance;
+}
+
 
 	MoveController MoveController::m_Instance;
 }
