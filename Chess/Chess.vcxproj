@@ -76,12 +76,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)NetworkLib;$(SolutionDir)GLerKa;$(SolutionDir)Dependecies\GLFW\include;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GLerKa;$(SolutionDir)Dependecies\GLFW\include;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)NetworkLib.lib;$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;$(SolutionDir)Dependecies\GLFW\$(PlatformTarget)\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;$(SolutionDir)Dependecies\GLFW\$(PlatformTarget)\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -92,14 +92,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)NetworkLib;$(SolutionDir)GLerKa;$(SolutionDir)Dependecies\GLFW\include;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GLerKa;$(SolutionDir)Dependecies\GLFW\include;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)NetworkLib.lib;$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;$(SolutionDir)Dependecies\GLFW\$(PlatformTarget)\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;$(SolutionDir)Dependecies\GLFW\$(PlatformTarget)\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -108,12 +108,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)NetworkLib;$(SolutionDir)GLerKa;$(SolutionDir)Dependecies\GLFW\include;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GLerKa;$(SolutionDir)Dependecies\GLFW\include;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)NetworkLib.lib;$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;$(SolutionDir)Dependecies\GLFW\$(PlatformTarget)\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;$(SolutionDir)Dependecies\GLFW\$(PlatformTarget)\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,20 +124,19 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)NetworkLib;$(SolutionDir)GLerKa;$(SolutionDir)Dependecies\GLFW\include;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GLerKa;$(SolutionDir)Dependecies\GLFW\include;$(SolutionDir)ChessCore</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)NetworkLib.lib;$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;$(SolutionDir)Dependecies\GLFW\$(PlatformTarget)\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)$(IntermediateOutputPath)GLerKa.lib;$(SolutionDir)$(IntermediateOutputPath)ChessCore.lib;$(SolutionDir)Dependecies\GLFW\$(PlatformTarget)\glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chess.cpp" />
     <ClCompile Include="ConRenderer.cpp" />
-    <ClCompile Include="NetworkTeller.cpp" />
     <ClCompile Include="TypeInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -147,13 +146,9 @@
     <ProjectReference Include="..\GLerKa\GLerKa.vcxproj">
       <Project>{8e11ba86-6018-4dab-84a1-6e96c119fdca}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\NetworkLib\NetworkLib.vcxproj">
-      <Project>{29f29722-43fd-451e-84ca-f199ea952fd6}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConRenderer.h" />
-    <ClInclude Include="NetworkTeller.h" />
     <ClInclude Include="TypeInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

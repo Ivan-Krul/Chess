@@ -14,26 +14,26 @@ namespace chess_lib
 	Board::Board()
 	{
 		m_Board.fill({ PieceType::none, SideType::none });
-		m_Board[0] = { PieceType::rook, SideType::black };
-		m_Board[1] = { PieceType::knight, SideType::black };
-		m_Board[2] = { PieceType::bishop, SideType::black };
-		m_Board[3] = { PieceType::queen, SideType::black };
+		//m_Board[0] = { PieceType::rook, SideType::black };
+		//m_Board[1] = { PieceType::knight, SideType::black };
+		//m_Board[2] = { PieceType::bishop, SideType::black };
+		//m_Board[3] = { PieceType::queen, SideType::black };
 		m_Board[4] = { PieceType::king, SideType::black };
-		m_Board[5] = { PieceType::bishop, SideType::black };
-		m_Board[6] = { PieceType::knight, SideType::black };
-		m_Board[7] = { PieceType::rook, SideType::black };
+		//m_Board[5] = { PieceType::bishop, SideType::black };
+		//m_Board[6] = { PieceType::knight, SideType::black };
+		//m_Board[7] = { PieceType::rook, SideType::black };
 		auto pawn = Tile{ PieceType::pawn, SideType::black };
 		memset((&*m_Board.begin()) + 8, *(int*)&pawn, 8);
 		pawn.side = SideType::white;
 		memset((&*m_Board.rbegin()) - 15, *(int*)&pawn, 8);
-		m_Board[56] = { PieceType::rook, SideType::white };
-		m_Board[57] = { PieceType::knight, SideType::white };
-		m_Board[58] = { PieceType::bishop, SideType::white };
-		m_Board[59] = { PieceType::queen, SideType::white };
+		//m_Board[56] = { PieceType::rook, SideType::white };
+		//m_Board[57] = { PieceType::knight, SideType::white };
+		//m_Board[58] = { PieceType::bishop, SideType::white };
+		//m_Board[59] = { PieceType::queen, SideType::white };
 		m_Board[60] = { PieceType::king, SideType::white };
-		m_Board[61] = { PieceType::bishop, SideType::white };
-		m_Board[62] = { PieceType::knight, SideType::white };
-		m_Board[63] = { PieceType::rook, SideType::white };
+		//m_Board[61] = { PieceType::bishop, SideType::white };
+		//m_Board[62] = { PieceType::knight, SideType::white };
+		//m_Board[63] = { PieceType::rook, SideType::white };
 
 		m_CastlingState = { 1,1,1,1 };
 
@@ -86,6 +86,34 @@ namespace chess_lib
 		str[0] = 'A' + x;
 		str[1] = '1' + (7 - y);
 		return str;
+	}
+
+	const char Board::ConvertToChar(const Tile tile)
+	{
+		if (tile.side == SideType::none || tile.type == PieceType::none)
+			return ' ';
+		
+		auto incr_cap = (tile.side == SideType::white) * 32;
+		static const auto atlas = " PRNBQK";
+
+		return atlas[static_cast<char>(tile.type)] + incr_cap;
+	}
+
+	const Tile Board::ConvertFromTile(const char ch)
+	{
+		if (ch == ' ')
+			return Tile{ PieceType::none, SideType::none };
+
+		auto caps_char = ch - 32;
+		static const auto atlas = " PRNBQK";
+
+		for (auto i = 0; i < 7; i++)
+		{
+			if (caps_char == atlas[i])
+				return Tile{ PieceType(i), SideType((caps_char == ch) + 1) };
+		}
+
+		return Tile{ PieceType::none, SideType::none };
 	}
 
 	void Board::ForcedMove(const Move move, bool need_accept)

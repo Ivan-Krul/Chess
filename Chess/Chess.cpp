@@ -129,15 +129,23 @@ int main(int argc, char const* argv[])
 
 	/* Initialize the library */
 	if (!glfwInit())
+	{
+		std::cout << "Oops... We have trouble to initialize glfw...\n";
+		std::cin.get();
 		return -1;
+	}
+	std::cout << "D: initialize is done\n";
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+	window = glfwCreateWindow(640, 480, "Chess", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
+		std::cout << "Oops... We have trouble to create a window...\n";
+		std::cin.get();
 		return -1;
 	}
+	std::cout << "D: creating window is done\n";
 
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);

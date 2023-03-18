@@ -11,19 +11,19 @@ namespace chess_lib
 
 		if (arr[m_pMove->GetP1()].type != PieceType::pawn)
 			return false;
-		else if (arr[m_pMove->GetP2() - front].side != (is_white_turn ? SideType::black : SideType::black))
+		else if (arr[m_pMove->GetP2() - front].side != (is_white_turn ? SideType::black : SideType::white))
 			return false;
 		else if (abs(abs(m_pMove->GetP2() - m_pMove->GetP1()) - 8) != 1)
 			return false;
 		else if (arr[m_pMove->GetP2() - front].type != PieceType::pawn)
 			return false;
-		else if (arr[m_pMove->GetP2() - front].side != (is_white_turn ? SideType::black : SideType::black))
+		else if (arr[m_pMove->GetP2() - front].side != (is_white_turn ? SideType::black : SideType::white))
 			return false;
 		else if (arr[m_pMove->GetP2()].side != SideType::none)
 			return false;
 
-		auto dx = abs(m_pMove->GetP2() - m_pMove->GetP1()) - 8;
-		auto cleaner = Move{ m_pMove->GetP2(), uint8_t(m_pMove->GetP1() - dx) };
+		auto dx = m_pMove->GetP2() - m_pMove->GetP1();
+		auto cleaner = Move{ m_pMove->GetP2(), uint8_t(m_pMove->GetP1() + dx - front) };
 		
 		m_pBoard->ForcedMove(cleaner,false);
 		m_pBoard->ForcedMove(*m_pMove);
