@@ -12,6 +12,7 @@ namespace chess_lib
 		static const std::string ConvertFromIndex(uint8_t index);
 		static const char ConvertToChar(const Tile tile);
 		static const Tile ConvertFromChar(const char ch);
+		static bool IsInBoard(pos position);
 
 	private:
 		ChessConvertor() = default;

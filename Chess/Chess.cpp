@@ -12,7 +12,7 @@
 
 int main(int argc, char const* argv[])
 {
-	chess_lib::Board b("r6r/1b2k1bq/8/8/7B/8/8/R3K2R b");
+	chess_lib::Board b("r1bqkbnr/pppppppp/n7/8/8/P7/1PPPPPPP/RNBQKBNR w KQkq");
 	glerka_lib::Renderer r(640, 480);
 
 	GLFWwindow* window;

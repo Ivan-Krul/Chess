@@ -7,6 +7,8 @@ namespace chess_lib
 	{
 		std::vector<Move> f_GenerateLineMoves(const Board& p_board, const uint8_t position, const std::vector<pos> vectors, bool iterative = true, bool only_enemy = false) const;
 		std::vector<Move> f_GeneratePawnAttackMoves(const Board& board, const uint8_t position, bool only_enemy = false) const;
+
+		void f_GenerateStraightForwardMove(std::vector<Move>& moves, const Board& board, const uint8_t position) const;
 	public:
 		std::vector<Move> GenerateRookMove(const Board& p_board, const uint8_t position, bool only_enemy = false) const;
 		std::vector<Move> GenerateBishopMove(const Board& p_board, const uint8_t position, bool only_enemy = false) const;

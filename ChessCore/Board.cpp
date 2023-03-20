@@ -40,8 +40,6 @@ namespace chess_lib
 		m_PreviousMove = std::make_shared<Move>(0xff, 0xff);
 	}
 
-#include <cassert>
-
 	Board::Board(const std::string& fen)
 	{
 		auto ch = char();
@@ -51,9 +49,6 @@ namespace chess_lib
 		auto is_number = [](char ch) {return '0' <= ch && ch <= '9'; };
 
 		m_Board.fill({ PieceType::none, SideType::none });
-
-		assert(ChessConvertor::ConvertFromChar('n').side == SideType::black);
-		assert(ChessConvertor::ConvertFromChar('B').side == SideType::white);
 
 		auto ind = 0;
 		for (ind; ind < fen.size(); ind++)

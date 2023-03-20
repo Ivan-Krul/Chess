@@ -46,28 +46,33 @@ namespace chess_lib
 		auto moves = std::vector<Move>();
 
 		auto constr = [=](uint8_t ind) { return Move{ position, uint8_t(ind) }; };
-		auto to_ind = [=](pos dot) { return dot.x + dot.y * 8; };
-		auto to_pos = [=](uint8_t ind) { return pos{ int8_t(ind % 8), int8_t(ind / 8) }; };
 
-		auto posit = to_pos(position);
-
-		auto is_in_map = [=](pos dot) { return unsigned(dot.x) < 8 && unsigned(dot.y) < 8; };
-
-		auto opposite_delta_side = [=](int8_t x) {return is_white_move ? -x : x; };
-
-		auto opposite_piece = [=]() {return is_white_move ? SideType::black : SideType::white; };
-		auto delta_pos = [=](int8_t x, int8_t y) {return pos{ int8_t(posit.x + x) , int8_t(posit.y + y) }; };
-
-		auto del_pos = delta_pos(0, opposite_delta_side(-1));
+		auto own_side = (is_white_move ? 1 : -1);
 
 		for (int8_t i = -1; i < 2; i += 2)
 		{
-			del_pos.x = posit.x + i;
-			if (!is_in_map(del_pos))
+			if (!ChessConvertor::IsInBoard(pos{ int8_t(position % 8 + i) , int8_t(position / 8 + own_side) }))
 				continue;
-			moves.push_back(constr(to_ind(del_pos)));
+			moves.push_back(constr((position + i) + own_side * 8));
 		}
 		return moves;
+	}
+
+	void MoveGenerator::f_GenerateStraightForwardMove(std::vector<Move>& moves, const Board& board, const uint8_t position) const
+	{
+		auto& arr = board.GetBoard();
+		auto is_white_move = board.GetIsWhiteMove();
+
+		auto constr = [=](uint8_t ind) { return Move{ position, uint8_t(ind) }; };
+		auto opposite_delta = (is_white_move ? -8 : 8);
+
+		if (arr[position + opposite_delta].side == SideType::none)
+		{
+			moves.push_back(constr(position + opposite_delta));
+			if (arr[position + opposite_delta * 2].side == SideType::none
+				&& position / 8 == (is_white_move ? 6 : 1))
+				moves.push_back(constr(position + opposite_delta * 2));
+		}
 	}
 
 	std::vector<Move> MoveGenerator::GenerateRookMove(const Board& p_board, const uint8_t position, bool only_enemy) const
@@ -109,54 +114,34 @@ namespace chess_lib
 		auto moves = std::vector<Move>();
 		auto prev_move = p_board.GetPreviousMove();
 
-		auto to_pos = [=](uint8_t ind) { return pos{ int8_t(ind % 8), int8_t(ind / 8) }; };
+		f_GenerateStraightForwardMove(moves, p_board, position);
+
+		auto opposite_piece = (is_white_move ? SideType::black : SideType::white);
+		auto forward = is_white_move ? -1 : 1;
+
 		auto constr = [=](uint8_t ind) { return Move{ position, uint8_t(ind) }; };
-		auto to_ind = [=](pos dot) { return dot.x + dot.y * 8; };
-		auto opposite_delta_side = [=](int8_t x) {return is_white_move ? -x : x; };
 
-		auto posit = to_pos(position);
-
-		auto is_in_map = [=](pos dot) { return unsigned(dot.x) < 8 && unsigned(dot.y) < 8; };
-		auto opposite_side = [=](uint8_t x) {return is_white_move ? 7 - x : x; }; // 6y : 1y, 4y : 3y
-
+		// Attack
+		for (int8_t i = -1; i < 2; i += 2)
 		{
-			auto cond_is_busy = [=](pos dot) {return is_in_map(dot) && arr[to_ind(dot)].side == SideType::none; };
-
-			if (cond_is_busy(to_pos(position + opposite_delta_side(8))))
-			{
-				moves.push_back(constr(position + opposite_delta_side(8)));
-				if (cond_is_busy(to_pos(position + opposite_delta_side(16))) && posit.y == opposite_side(1))
-					moves.push_back(constr(position + opposite_delta_side(16)));
-			}
+			if (!ChessConvertor::IsInBoard(pos{ (int8_t)(position % 8 + i), (int8_t)(position / 8 + forward) }))
+				continue;
+			if (arr[(position + i) + forward * 8].side == opposite_piece)
+				moves.push_back(constr((position + i) + forward * 8));
 		}
 
-		auto opposite_piece = [=]() {return is_white_move ? SideType::black : SideType::white; };
-		auto delta_pos = [=](int8_t x, int8_t y) {return pos{ int8_t(posit.x + x) , int8_t(posit.y + y) }; };
-
+		// En Passant
+		for (int8_t i = -1; i < 2; i += 2)
 		{
-			auto del_pos = delta_pos(0, opposite_delta_side(1));
-
-			for (int8_t i = -1; i < 2; i += 2)
-			{
-				del_pos = delta_pos(i, opposite_delta_side(1));
-				if (!is_in_map(del_pos))
-					continue;
-				if (arr[to_ind(del_pos)].side == opposite_piece())
-					moves.push_back(constr(to_ind(del_pos)));
-			}
-
-			for (int8_t i = -1; i < 2; i += 2)
-			{
-				del_pos = delta_pos(i, 0);
-				if (!is_in_map(del_pos))
-					continue;
-				if (arr[to_ind(del_pos)].side == opposite_piece()
-					&& to_pos(prev_move->GetP1()).y == opposite_side(6)
-					&& arr[to_ind(del_pos)].type == PieceType::pawn
-					&& to_pos(prev_move->GetP1()).x == del_pos.x
-					)
-					moves.push_back(constr(to_ind(del_pos) + opposite_delta_side(8)));
-			}
+			if (!ChessConvertor::IsInBoard(pos{ (int8_t)(position % 8 + i), (int8_t)(position / 8) }))
+				continue;
+				
+			if (arr[position + i].side == opposite_piece
+				&& prev_move->GetP1() % 8 == position % 8 + i
+				&& prev_move->GetP1() / 8 == (is_white_move ? 1 : 6)
+				&& arr[position + i].type == PieceType::pawn
+				)
+				moves.push_back(constr(position + i + (is_white_move ? -8 : 8)));
 		}
 
 		return moves;

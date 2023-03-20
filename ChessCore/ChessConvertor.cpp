@@ -65,4 +65,8 @@ namespace chess_lib
 
 		return Tile{ PieceType::none, SideType::none };
 	}
+	bool ChessConvertor::IsInBoard(pos position)
+	{
+		return 0 <= position.x && position.x < 8 && 0 <= position.y && position.y < 8;
+	}
 }
