@@ -20,12 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="ChessConvertor.cpp" />
     <ClCompile Include="MoveController.cpp" />
     <ClCompile Include="MoveGenerator.cpp" />
     <ClCompile Include="MovePusher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
+    <ClInclude Include="ChessConvertor.h" />
     <ClInclude Include="MoveController.h" />
     <ClInclude Include="MoveGenerator.h" />
     <ClInclude Include="MovePusher.h" />

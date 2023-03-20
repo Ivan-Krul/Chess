@@ -1,9 +1,9 @@
 #pragma once
 #include <array>
-#include <string>
 #include <memory>
 
 #include "Tile.h"
+#include "ChessConvertor.h"
 
 namespace chess_lib
 {
@@ -25,16 +25,12 @@ namespace chess_lib
 		const uint8_t PromPos() const;
 	public:
 		Board();
+		Board(const std::string& fen);
 
 		const std::array<Tile, 64> GetBoard() const;
 		const std::shared_ptr<Move> GetPreviousMove() const;
 		const bool GetIsWhiteMove() const;
 		const caslstate GetCastlingState() const;
-
-		static const uint8_t ConvertToIndex(std::string position);
-		static const std::string ConvertFromIndex(uint8_t index);
-		static const char ConvertToChar(const Tile tile);
-		static const Tile ConvertFromTile(const char ch);
 
 		void ForcedMove(const Move move, bool need_accept = true);
 

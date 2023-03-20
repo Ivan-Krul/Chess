@@ -136,8 +136,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chess.cpp" />
-    <ClCompile Include="ConRenderer.cpp" />
-    <ClCompile Include="TypeInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ChessCore\ChessCore.vcxproj">
@@ -146,10 +144,6 @@
     <ProjectReference Include="..\GLerKa\GLerKa.vcxproj">
       <Project>{8e11ba86-6018-4dab-84a1-6e96c119fdca}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ConRenderer.h" />
-    <ClInclude Include="TypeInterface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

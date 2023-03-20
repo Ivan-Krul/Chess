@@ -93,11 +93,8 @@ namespace chess_lib
 		for (const auto& p : our_pieces)
 		{
 			prop = Proposition(board, p);
-			//for (const auto& m : prop)
-			//	printf("D:\t%s -> %s\n", board.ConvertFromIndex(m.GetP1()).c_str(), board.ConvertFromIndex(m.GetP2()).c_str());
 			if (prop.size() != 0)
 			{
-				//printf("////////////////\n");
 				return false;
 			}
 		}

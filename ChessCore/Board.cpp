@@ -14,28 +14,72 @@ namespace chess_lib
 	Board::Board()
 	{
 		m_Board.fill({ PieceType::none, SideType::none });
-		//m_Board[0] = { PieceType::rook, SideType::black };
-		//m_Board[1] = { PieceType::knight, SideType::black };
-		//m_Board[2] = { PieceType::bishop, SideType::black };
-		//m_Board[3] = { PieceType::queen, SideType::black };
+		m_Board[0] = { PieceType::rook, SideType::black };
+		m_Board[1] = { PieceType::knight, SideType::black };
+		m_Board[2] = { PieceType::bishop, SideType::black };
+		m_Board[3] = { PieceType::queen, SideType::black };
 		m_Board[4] = { PieceType::king, SideType::black };
-		//m_Board[5] = { PieceType::bishop, SideType::black };
-		//m_Board[6] = { PieceType::knight, SideType::black };
-		//m_Board[7] = { PieceType::rook, SideType::black };
+		m_Board[5] = { PieceType::bishop, SideType::black };
+		m_Board[6] = { PieceType::knight, SideType::black };
+		m_Board[7] = { PieceType::rook, SideType::black };
 		auto pawn = Tile{ PieceType::pawn, SideType::black };
 		memset((&*m_Board.begin()) + 8, *(int*)&pawn, 8);
 		pawn.side = SideType::white;
 		memset((&*m_Board.rbegin()) - 15, *(int*)&pawn, 8);
-		//m_Board[56] = { PieceType::rook, SideType::white };
-		//m_Board[57] = { PieceType::knight, SideType::white };
-		//m_Board[58] = { PieceType::bishop, SideType::white };
-		//m_Board[59] = { PieceType::queen, SideType::white };
+		m_Board[56] = { PieceType::rook, SideType::white };
+		m_Board[57] = { PieceType::knight, SideType::white };
+		m_Board[58] = { PieceType::bishop, SideType::white };
+		m_Board[59] = { PieceType::queen, SideType::white };
 		m_Board[60] = { PieceType::king, SideType::white };
-		//m_Board[61] = { PieceType::bishop, SideType::white };
-		//m_Board[62] = { PieceType::knight, SideType::white };
-		//m_Board[63] = { PieceType::rook, SideType::white };
+		m_Board[61] = { PieceType::bishop, SideType::white };
+		m_Board[62] = { PieceType::knight, SideType::white };
+		m_Board[63] = { PieceType::rook, SideType::white };
 
 		m_CastlingState = { 1,1,1,1 };
+
+		m_PreviousMove = std::make_shared<Move>(0xff, 0xff);
+	}
+
+#include <cassert>
+
+	Board::Board(const std::string& fen)
+	{
+		auto ch = char();
+		auto slash_count = 0;
+		auto colomnes = 0;
+
+		auto is_number = [](char ch) {return '0' <= ch && ch <= '9'; };
+
+		m_Board.fill({ PieceType::none, SideType::none });
+
+		assert(ChessConvertor::ConvertFromChar('n').side == SideType::black);
+		assert(ChessConvertor::ConvertFromChar('B').side == SideType::white);
+
+		auto ind = 0;
+		for (ind; ind < fen.size(); ind++)
+		{
+			ch = fen[ind];
+			if (ch == ' ')
+				break;
+			if (ch == '/')
+			{
+				slash_count++;
+				colomnes = 0;
+				continue;
+			}
+			if (is_number(ch))
+			{
+				colomnes += ch - '0';
+				continue;
+			}
+
+			m_Board[colomnes + slash_count * 8] = ChessConvertor::ConvertFromChar(ch);
+			colomnes++;
+		}
+		ind++;
+		m_IsWhiteMove = !(fen[ind] == 'b');
+
+		memset(&m_CastlingState, 0, sizeof(m_CastlingState));
 
 		m_PreviousMove = std::make_shared<Move>(0xff, 0xff);
 	}
@@ -58,62 +102,6 @@ namespace chess_lib
 	const Board::caslstate Board::GetCastlingState() const
 	{
 		return m_CastlingState;
-	}
-
-	const uint8_t Board::ConvertToIndex(std::string position)
-	{
-		if (position.size() < 2)
-			return 0xff;
-		auto x = 0;
-		if (position[0] - 'a' < 8 && position[0] >= 'a')
-			x = position[0] - 'a';
-		else if (position[0] - 'A' < 8 && position[0] >= 'A')
-			x = position[0] - 'A';
-		else
-			return 0xff;
-		auto y = position[1] - '1';
-		if (x >= 0 && x < 8 && y >= 0 && y < 8)
-			return x + (8 - y - 1) * 8;
-		else
-			return 0xff;
-	}
-
-	const std::string Board::ConvertFromIndex(uint8_t index)
-	{
-		auto x = index % 8;
-		auto y = index / 8;
-		auto str = std::string("  ");
-		str[0] = 'A' + x;
-		str[1] = '1' + (7 - y);
-		return str;
-	}
-
-	const char Board::ConvertToChar(const Tile tile)
-	{
-		if (tile.side == SideType::none || tile.type == PieceType::none)
-			return ' ';
-		
-		auto incr_cap = (tile.side == SideType::white) * 32;
-		static const auto atlas = " PRNBQK";
-
-		return atlas[static_cast<char>(tile.type)] + incr_cap;
-	}
-
-	const Tile Board::ConvertFromTile(const char ch)
-	{
-		if (ch == ' ')
-			return Tile{ PieceType::none, SideType::none };
-
-		auto caps_char = ch - 32;
-		static const auto atlas = " PRNBQK";
-
-		for (auto i = 0; i < 7; i++)
-		{
-			if (caps_char == atlas[i])
-				return Tile{ PieceType(i), SideType((caps_char == ch) + 1) };
-		}
-
-		return Tile{ PieceType::none, SideType::none };
 	}
 
 	void Board::ForcedMove(const Move move, bool need_accept)
