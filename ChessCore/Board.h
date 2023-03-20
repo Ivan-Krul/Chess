@@ -16,14 +16,7 @@ namespace chess_lib
 			char bq : 2;
 			char bk : 2;
 		};
-	private:
-		caslstate m_CastlingState;
-		std::array<Tile, 64> m_Board;
-		std::shared_ptr<Move> m_PreviousMove;
-		bool m_IsWhiteMove = true;
 
-		const uint8_t PromPos() const;
-	public:
 		Board();
 		Board(const std::string& fen);
 
@@ -36,5 +29,14 @@ namespace chess_lib
 
 		bool NeedPromotion() const;
 		void ChoosePromotion(PromotionChoice type);
+
+	private:
+		caslstate m_CastlingState;
+		std::array<Tile, 64> m_Board;
+		std::shared_ptr<Move> m_PreviousMove;
+		bool m_IsWhiteMove = true;
+
+		const uint8_t f_PromPos() const;
+		void f_InitWritedCastling(const std::string& fen);
 	};
 }

@@ -2,13 +2,28 @@
 
 namespace chess_lib
 {
-	const uint8_t Board::PromPos() const
+	const uint8_t Board::f_PromPos() const
 	{
 		for (uint8_t y = 0; y < 8; y += 7)
 			for (uint8_t x = 0; x < 8; x++)
 				if (m_Board[x + y * 8].type == PieceType::pawn)
 					return x + y * 8;
 		return 0xff;
+	}
+
+	void Board::f_InitWritedCastling(const std::string& fen)
+	{
+		for (uint8_t i = 0; i < fen.size(); i++)
+		{
+			if (fen[i] == 'K')
+				m_CastlingState.wk = true;
+			else if (fen[i] == 'Q')
+				m_CastlingState.wq = true;
+			else if (fen[i] == 'k')
+				m_CastlingState.bk = true;
+			else if (fen[i] == 'q')
+				m_CastlingState.bq = true;
+		}
 	}
 
 	Board::Board()
@@ -73,8 +88,9 @@ namespace chess_lib
 		}
 		ind++;
 		m_IsWhiteMove = !(fen[ind] == 'b');
-
+		ind += 2;
 		memset(&m_CastlingState, 0, sizeof(m_CastlingState));
+		f_InitWritedCastling(fen.substr(fen.size() - 4));
 
 		m_PreviousMove = std::make_shared<Move>(0xff, 0xff);
 	}
@@ -150,19 +166,19 @@ namespace chess_lib
 		switch (type)
 		{
 			case chess_lib::PromotionChoice::queen:
-				m_Board[PromPos()].type = PieceType::queen;
+				m_Board[f_PromPos()].type = PieceType::queen;
 				m_IsWhiteMove = !m_IsWhiteMove;
 				break;
 			case chess_lib::PromotionChoice::knight:
-				m_Board[PromPos()].type = PieceType::knight;
+				m_Board[f_PromPos()].type = PieceType::knight;
 				m_IsWhiteMove = !m_IsWhiteMove;
 				break;
 			case chess_lib::PromotionChoice::rook:
-				m_Board[PromPos()].type = PieceType::rook;
+				m_Board[f_PromPos()].type = PieceType::rook;
 				m_IsWhiteMove = !m_IsWhiteMove;
 				break;
 			case chess_lib::PromotionChoice::bishop:
-				m_Board[PromPos()].type = PieceType::bishop;
+				m_Board[f_PromPos()].type = PieceType::bishop;
 				m_IsWhiteMove = !m_IsWhiteMove;
 				break;
 		}
