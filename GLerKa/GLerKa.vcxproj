@@ -143,6 +143,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConfigParser.h" />
     <ClInclude Include="Depencies.h" />
     <ClInclude Include="LoaderColor.h" />
     <ClInclude Include="LoaderModel.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="SegmentLineRender.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConfigParser.cpp" />
     <ClCompile Include="LoaderColor.cpp" />
     <ClCompile Include="LoaderModel.cpp" />
     <ClCompile Include="Renderer.cpp" />

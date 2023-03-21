@@ -9,7 +9,7 @@ namespace glerka_lib
 		return
 			std::vector<float>();
 	}
-	void LoaderModel::Load()
+	void LoaderModel::load()
 	{
 		std::ifstream fin(c_Directory);
 

@@ -20,7 +20,8 @@ namespace glerka_lib
 		Color getColorPiece(bool is_white);
 		Color getSelected(bool is_white);
 
-		void Load();
+		void setColors(Color cboardw, Color cboardb, Color cpiecew, Color cpieceb, Color cdeltas);
+		void load();
 	private:
 		const std::string c_Directory = "./chess.dat";
 

@@ -31,7 +31,16 @@ namespace glerka_lib
 		return Color{ (uint8_t)r, (uint8_t)g, (uint8_t)b };
 	}
 
-	void LoaderColor::Load()
+	void LoaderColor::setColors(Color cboardw, Color cboardb, Color cpiecew, Color cpieceb, Color cdeltas)
+	{
+		m_ColBoardW = cboardw;
+		m_ColBoardB = cboardb;
+		m_ColPieceW = cpiecew;
+		m_ColPieceB = cpieceb;
+		m_ColDeltaSelect = cdeltas;
+	}
+
+	void LoaderColor::load()
 	{
 		std::ifstream fin(c_Directory);
 

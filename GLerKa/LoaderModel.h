@@ -11,7 +11,7 @@ namespace glerka_lib
 	class LoaderModel
 	{ 
 	public:
-		void Load();
+		void load();
 		std::vector<float> getPiece(chess_lib::PieceType type);
 	private:
 		const std::string c_Directory = "./chess.dat";
