@@ -4,6 +4,8 @@
 #include <fstream>
 #include <array>
 
+#include "nlohmann/json.hpp"
+
 namespace glerka_lib
 {
 	struct Color

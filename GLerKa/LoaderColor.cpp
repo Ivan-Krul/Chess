@@ -54,60 +54,28 @@ namespace glerka_lib
 			return;
 		}
 
-		bool is_my_part = false;
-		bool breakpoints[] = { false, false, false, false, false };
-		auto statement = 0;
-		auto vec_state = 0;
-		auto str = std::string();
-		auto is_break = true;
-		auto filler = std::array<uint8_t, 15>();
+		nlohmann::json json_file = nlohmann::json::parse(fin);
 
-		while (fin >> str)
-		{
-			if (is_my_part)
-			{
-				if (str == "board_w")
-					statement = 0;
-				else if (str == "board_b")
-					statement = 1;
-				else if (str == "piece_w")
-					statement = 2;
-				else if (str == "piece_b")
-					statement = 3;
-				else if (str == "delta")
-					statement = 4;
-				else if (str == "end")
-					breakpoints[statement] = true;
-				else
-				{
-					filler[statement * 3 + vec_state % 3] = uint8_t(std::stoi(str));
-					vec_state++;
-				}
-			}
+		m_ColBoardW.r = json_file["color"]["board_w"][0];
+		m_ColBoardW.g = json_file["color"]["board_w"][1];
+		m_ColBoardW.b = json_file["color"]["board_w"][2];
+		
+		m_ColBoardB.r = json_file["color"]["board_b"][0];
+		m_ColBoardB.g = json_file["color"]["board_b"][1];
+		m_ColBoardB.b = json_file["color"]["board_b"][2];
 
-			if (str == "color")
-				is_my_part = true;
+		m_ColPieceW.r = json_file["color"]["piece_w"][0];
+		m_ColPieceW.g = json_file["color"]["piece_w"][1];
+		m_ColPieceW.b = json_file["color"]["piece_w"][2];
 
-			if (!is_my_part)
-				continue;
+		m_ColPieceB.r = json_file["color"]["piece_b"][0];
+		m_ColPieceB.g = json_file["color"]["piece_b"][1];
+		m_ColPieceB.b = json_file["color"]["piece_b"][2];
 
-			for (auto& bp : breakpoints)
-			{
-				if (bp)
-					continue;
-				is_break = false;
-				break;
-			}
-			if (is_break)
-				break;
-		}
+		m_ColDeltaSelect.r = json_file["color"]["delta"][0];
+		m_ColDeltaSelect.g = json_file["color"]["delta"][1];
+		m_ColDeltaSelect.b = json_file["color"]["delta"][2];
 
 		fin.close();
-
-		m_ColBoardW = {			filler[0 + 0],	filler[1 + 0],	 filler[2 + 0] };
-		m_ColBoardB = {			filler[0 + 3],	filler[1 + 3],	 filler[2 + 3] };
-		m_ColPieceW = {			filler[0 + 6],	filler[1 + 6],	 filler[2 + 6] };
-		m_ColPieceB = {			filler[0 + 9],	filler[1 + 9],	 filler[2 + 9] };
-		m_ColDeltaSelect = {	filler[0 + 12],	filler[1 + 12],	 filler[2 + 12] };
 	}
 }

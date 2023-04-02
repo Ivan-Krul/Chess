@@ -26,6 +26,7 @@ namespace glerka_lib
 		void HandleMate(GLFWwindow* window, const chess_lib::Board& board);
 		void HandleDraw(GLFWwindow* window, const chess_lib::Board& board);
 		void HandleStalemate(GLFWwindow* window, const chess_lib::Board& board);
+		void Load();
 
 		int GetWidth() const;
 		int GetHeight() const;

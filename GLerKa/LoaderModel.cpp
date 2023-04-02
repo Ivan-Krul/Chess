@@ -19,53 +19,21 @@ namespace glerka_lib
 			return;
 		}
 
-		bool is_my_part = false;
-		bool breakpoints[6] = { false, false, false, false, false, false };
-		auto statement = 0;
-		auto str = std::string();
-		auto is_break = true;
+		nlohmann::json json_file = nlohmann::json::parse(fin);
 
-		while (fin >> str)
-		{
-			if (str == "color" && is_my_part)
-				break;
-
-			if (is_my_part)
-			{
-				if (str == "pawn")
-					statement = 0;
-				else if (str == "rook")
-					statement = 1;
-				else if (str == "knight")
-					statement = 2;
-				else if (str == "bishop")
-					statement = 3;
-				else if (str == "queen")
-					statement = 4;
-				else if (str == "king")
-					statement = 5;
-				else if (str == "end")
-					breakpoints[statement] = true;
-				else
-					m_Models[statement].push_back(std::stof(str));
-			}
-
-			if (str == "model")
-				is_my_part = true;
-
-			if (!is_my_part)
-				continue;
-
-			for (auto& bp : breakpoints)
-			{
-				if (bp)
-					continue;
-				is_break = false;
-				break;
-			}
-			if (is_break)
-				break;
-		}
+		m_Models.fill(std::vector<float>());
+		for (auto& vert : json_file["model"]["pawn"])
+			m_Models[0].push_back(vert);
+		for (auto& vert : json_file["model"]["rook"])
+			m_Models[1].push_back(vert);
+		for (auto& vert : json_file["model"]["knight"])
+			m_Models[2].push_back(vert);
+		for (auto& vert : json_file["model"]["bishop"])
+			m_Models[3].push_back(vert);
+		for (auto& vert : json_file["model"]["queen"])
+			m_Models[4].push_back(vert);
+		for (auto& vert : json_file["model"]["king"])
+			m_Models[5].push_back(vert);
 
 		fin.close();
 	}

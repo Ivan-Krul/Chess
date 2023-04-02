@@ -6,6 +6,8 @@
 
 #include "Tile.h"
 
+#include "nlohmann/json.hpp"
+
 namespace glerka_lib
 {
 	class LoaderModel
