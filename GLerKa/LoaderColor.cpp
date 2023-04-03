@@ -42,7 +42,8 @@ namespace glerka_lib
 
 	void LoaderColor::load()
 	{
-		std::ifstream fin(c_Directory);
+		std::ifstream fin;
+		fin.open(PATH_TO_CONFIG);
 
 		if (!fin.is_open())
 		{
@@ -54,7 +55,19 @@ namespace glerka_lib
 			return;
 		}
 
+		if (!fin)
+		{
+			m_ColBoardW = c_Stand[0];
+			m_ColBoardB = c_Stand[1];
+			m_ColPieceW = c_Stand[2];
+			m_ColPieceB = c_Stand[3];
+			m_ColDeltaSelect = c_Stand[4];
+			return;
+		}
+
 		nlohmann::json json_file = nlohmann::json::parse(fin);
+
+		fin.close();
 
 		m_ColBoardW.r = json_file["color"]["board_w"][0];
 		m_ColBoardW.g = json_file["color"]["board_w"][1];
@@ -75,7 +88,5 @@ namespace glerka_lib
 		m_ColDeltaSelect.r = json_file["color"]["delta"][0];
 		m_ColDeltaSelect.g = json_file["color"]["delta"][1];
 		m_ColDeltaSelect.b = json_file["color"]["delta"][2];
-
-		fin.close();
 	}
 }

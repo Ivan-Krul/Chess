@@ -4,7 +4,7 @@
 #include <fstream>
 #include <array>
 
-#include "nlohmann/json.hpp"
+#include "ConfigPath.h"
 
 namespace glerka_lib
 {
@@ -25,8 +25,6 @@ namespace glerka_lib
 		void setColors(Color cboardw, Color cboardb, Color cpiecew, Color cpieceb, Color cdeltas);
 		void load();
 	private:
-		const std::string c_Directory = "./chess.dat";
-
 		const std::vector<Color> c_Stand = { Color{221,221,221}, Color{34,34,34}, Color{232, 167, 120}, Color{108, 57, 20}, Color{0,0,uint8_t(-63)}};
 
 		Color m_ColBoardW;

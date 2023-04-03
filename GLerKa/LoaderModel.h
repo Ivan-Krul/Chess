@@ -6,7 +6,7 @@
 
 #include "Tile.h"
 
-#include "nlohmann/json.hpp"
+#include "ConfigPath.h"
 
 namespace glerka_lib
 {
@@ -16,8 +16,6 @@ namespace glerka_lib
 		void load();
 		std::vector<float> getPiece(chess_lib::PieceType type);
 	private:
-		const std::string c_Directory = "./chess.dat";
-
 		const std::array<std::vector<float>, 6> c_StandModels = 
 		{
 			std::vector<float>{ .5f,.8f,.2f,.2f,.8f,.2f },

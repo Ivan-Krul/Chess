@@ -4,8 +4,8 @@ namespace glerka_lib
 {
 	Renderer::Renderer(int width, int height)
 	{
-		m_lc.Load();
-		m_lm.Load();
+		m_lc.load();
+		m_lm.load();
 		m_CWidthPx = width;
 		m_CHeightPx = height;
 		m_WidthPx = width;
@@ -13,7 +13,7 @@ namespace glerka_lib
 		m_ClickCoord = -1;
 	}
 
-	void Renderer::RenderUnPushedSquare(const chess_lib::Board& board, const uint8_t index, const bool is_selected)
+	void Renderer::RenderUnPushedSquare(const chess_lib::Board& board, const uint8_t index, const bool is_selected, const bool is_check)
 	{
 		const auto& tile = board.GetBoard()[index];
 		const auto col_piece = m_lc.getColorPiece(board.GetBoard()[index].side == chess_lib::SideType::white);
@@ -23,6 +23,13 @@ namespace glerka_lib
 
 		if (is_selected || board.GetPreviousMove()->GetP1() == index || board.GetPreviousMove()->GetP2() == index)
 			col_board = m_lc.getSelected((index % 8 + index / 8) % 2);
+		else if (is_check && tile.type == chess_lib::PieceType::king)
+		{
+			col_board = m_lc.getSelected((index % 8 + index / 8) % 2);
+			col_board.r = ~col_board.r;
+			col_board.g = ~col_board.g;
+			col_board.b = ~col_board.b;
+		}
 		else
 			col_board = m_lc.getColorBoard((index % 8 + index / 8) % 2);
 
@@ -42,7 +49,7 @@ namespace glerka_lib
 		glDisableClientState(GL_VERTEX_ARRAY);
 	}
 
-	void Renderer::RenderBoard(const chess_lib::Board& board, const bool is_white_side)
+	void Renderer::RenderBoard(const chess_lib::Board& board, bool is_white_side)
 	{
 		glLoadIdentity();
 		glTranslatef(-1.0f, -1.0f, 0.0f);
@@ -52,12 +59,23 @@ namespace glerka_lib
 
 		auto selected = std::vector<chess_lib::Move>();
 		auto conv_to_index = [=](uint8_t x, uint8_t y) { return x + y * 8; };
-		unsigned cur_coord = conv_to_index((is_white_side ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0))), (is_white_side ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0))));
-		//auto norm_predict = [=](uint8_t x, uint8_t y) { return (is_white_side ? (x + (7 - y) * 8) : ((7 - x) + y * 8)); };
+		bool is_check = false;
 
+		if (m_CFGNeedRotate)
+			is_white_side = true;
+
+		if (m_CFGLightCheck)
+		{
+			chess_lib::MoveGenerator mg;
+			is_check = mg.CanKingBeInCheck(board, is_white_side);
+		}
+
+		uint8_t x = is_white_side ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0));
+		uint8_t y = is_white_side ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0));
+		unsigned cur_coord = conv_to_index(x, y);
 
 		auto hold = false;
-		if ((~m_ClickCoord))
+		if (~m_ClickCoord)
 		{
 			auto mc = chess_lib::MoveController::GetInstance();
 			selected = mc.Proposition(board, m_ClickCoord);
@@ -81,7 +99,7 @@ namespace glerka_lib
 				}
 				glPushMatrix();
 				glTranslatef(is_white_side ? x : 7 - x, is_white_side ? 7 - y : y, 0.0f);
-				RenderUnPushedSquare(board, conv_to_index(x, y), hold);
+				RenderUnPushedSquare(board, conv_to_index(x, y), hold, is_check);
 				glPopMatrix();
 			}
 		}
@@ -199,6 +217,23 @@ namespace glerka_lib
 		RenderWord("stalemate", { 255,0,0 }, 5.0f);
 	}
 
+	void Renderer::Load()
+	{
+		std::ifstream fin;
+
+		fin.open(PATH_TO_CONFIG);
+
+		if (!fin.is_open())
+			return;
+
+		nlohmann::json json_file = nlohmann::json::parse(fin);
+
+		fin.close();
+
+		m_CFGNeedRotate = json_file["need rotate after move"];
+		m_CFGPlayAsBlackVision = json_file["vision as black"];
+	}
+
 	int Renderer::GetWidth() const
 	{
 		return m_WidthPx;
@@ -221,9 +256,14 @@ namespace glerka_lib
 
 	uint8_t Renderer::GetCurPos(const bool is_white)
 	{
-		auto x = ((is_white && m_IsSwapedN) ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0)));
-		auto y = ((is_white && m_IsSwapedN) ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0)));
-		return x + y * 8;
+		if (m_CFGNeedRotate)
+		{
+			auto x = ((is_white && m_IsSwapedN) ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0)));
+			auto y = ((is_white && m_IsSwapedN) ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0)));
+			return x + y * 8;
+		}
+		else
+			return (int)GetCurPosX() + (7 - (int)GetCurPosY()) * 8;
 	}
 
 	int Renderer::m_CWidthPx = 1;

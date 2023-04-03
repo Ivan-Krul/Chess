@@ -11,7 +11,8 @@ namespace glerka_lib
 	}
 	void LoaderModel::load()
 	{
-		std::ifstream fin(c_Directory);
+		std::ifstream fin;
+		fin.open(PATH_TO_CONFIG);
 
 		if (!fin.is_open())
 		{
@@ -19,7 +20,15 @@ namespace glerka_lib
 			return;
 		}
 
+		if (!fin.good())
+		{
+			m_Models = c_StandModels;
+			return;
+		}
+
 		nlohmann::json json_file = nlohmann::json::parse(fin);
+
+		fin.close();
 
 		m_Models.fill(std::vector<float>());
 		for (auto& vert : json_file["model"]["pawn"])
@@ -33,8 +42,6 @@ namespace glerka_lib
 		for (auto& vert : json_file["model"]["queen"])
 			m_Models[4].push_back(vert);
 		for (auto& vert : json_file["model"]["king"])
-			m_Models[5].push_back(vert);
-
-		fin.close();
+			m_Models[5].push_back(vert);		
 	}
 }

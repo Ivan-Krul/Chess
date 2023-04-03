@@ -30,6 +30,9 @@
     <ClInclude Include="SegmentLineRender.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ConfigPath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LoaderModel.cpp">
