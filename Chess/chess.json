@@ -79,9 +79,10 @@
 		],
 		"board_b" :
 		[
-			10,
 			57,
-			20
+			20,
+			10
+			
 		],
 		"delta" :
 		[
@@ -89,10 +90,8 @@
 			0,
 			-50
 		]
-	}
-	"need rotate after move" : true
-	"vision as black" : false
+	},
+	"need rotate after move" : false,
+	"vision as black" : false,
 	"light up when check" : true
-	"write logs" : false
-	"log directory relative to the executable file" : "./"
 }

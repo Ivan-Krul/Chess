@@ -149,7 +149,7 @@ namespace chess_lib
 
 	std::vector<Move> MoveGenerator::GenerateCastlings(const Board& p_board, const bool is_white_turn) const
 	{
-		if (CanKingBeInCheck(p_board, is_white_turn))
+		if (CanKingBeInCheck(p_board, !is_white_turn))
 			return std::vector<Move>();
 
 		auto caslstates = p_board.GetCastlingState();

@@ -23,7 +23,7 @@ namespace glerka_lib
 
 		if (is_selected || board.GetPreviousMove()->GetP1() == index || board.GetPreviousMove()->GetP2() == index)
 			col_board = m_lc.getSelected((index % 8 + index / 8) % 2);
-		else if (is_check && tile.type == chess_lib::PieceType::king)
+		else if (is_check)
 		{
 			col_board = m_lc.getSelected((index % 8 + index / 8) % 2);
 			col_board.r = ~col_board.r;
@@ -32,7 +32,6 @@ namespace glerka_lib
 		}
 		else
 			col_board = m_lc.getColorBoard((index % 8 + index / 8) % 2);
-
 
 		glBegin(GL_TRIANGLE_FAN);
 		glColor3ub(col_board.r, col_board.g, col_board.b);
@@ -55,19 +54,19 @@ namespace glerka_lib
 		glTranslatef(-1.0f, -1.0f, 0.0f);
 		glScalef(2.0f / 8.0f, 2.0f / 8.0f, 1.0f);
 
-		m_IsSwapedN = is_white_side;
-
 		auto selected = std::vector<chess_lib::Move>();
 		auto conv_to_index = [=](uint8_t x, uint8_t y) { return x + y * 8; };
 		bool is_check = false;
 
+		m_IsSwapedN = is_white_side;
+
 		if (m_CFGNeedRotate)
-			is_white_side = true;
+			is_white_side = !m_CFGPlayAsBlackVision;
 
 		if (m_CFGLightCheck)
 		{
 			chess_lib::MoveGenerator mg;
-			is_check = mg.CanKingBeInCheck(board, is_white_side);
+			is_check = mg.CanKingBeInCheck(board, !is_white_side);
 		}
 
 		uint8_t x = is_white_side ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0));
@@ -90,11 +89,11 @@ namespace glerka_lib
 				{
 					for (auto& s : selected)
 					{
-						if (s.GetP1() == conv_to_index(x, y) || s.GetP2() == conv_to_index(x, y))
-						{
-							hold = true;
-							break;
-						}
+						if (!(s.GetP1() == conv_to_index(x, y) || s.GetP2() == conv_to_index(x, y)))
+							continue;
+
+						hold = true;
+						break;
 					}
 				}
 				glPushMatrix();
@@ -232,6 +231,8 @@ namespace glerka_lib
 
 		m_CFGNeedRotate = json_file["need rotate after move"];
 		m_CFGPlayAsBlackVision = json_file["vision as black"];
+
+		m_IsSwapedN = m_CFGPlayAsBlackVision;
 	}
 
 	int Renderer::GetWidth() const
@@ -263,7 +264,11 @@ namespace glerka_lib
 			return x + y * 8;
 		}
 		else
-			return (int)GetCurPosX() + (7 - (int)GetCurPosY()) * 8;
+		{
+			auto x = (!m_CFGPlayAsBlackVision ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0)));
+			auto y = (!m_CFGPlayAsBlackVision ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0)));
+			return x + y * 8;
+		}
 	}
 
 	int Renderer::m_CWidthPx = 1;

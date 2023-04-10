@@ -20,12 +20,6 @@ namespace glerka_lib
 			return;
 		}
 
-		if (!fin.good())
-		{
-			m_Models = c_StandModels;
-			return;
-		}
-
 		nlohmann::json json_file = nlohmann::json::parse(fin);
 
 		fin.close();
