@@ -8,11 +8,21 @@
 #include "Renderer.h"
 #include "Renderer.cpp"
 
-#include <cassert>
-
 int main(int argc, char const* argv[])
 {
-	chess_lib::Board b("2kr3r/p1ppqpb1/bn2Qnp1/3PN3/1p2P3/2N5/PPPBBPPP/R3K2R b KQ");
+	std::ifstream fin(PATH_TO_CONFIG);
+	std::string fen = "";
+
+	if (fin.is_open())
+	{
+		nlohmann::json json_file = nlohmann::json::parse(fen);
+		fen = json_file["board start position in FEN"];
+		fin.close();
+	}
+	else
+		fen = "rnbqkbnr/ppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq";
+
+	chess_lib::Board b(fen);
 	glerka_lib::Renderer r(640, 480);
 
 	GLFWwindow* window;

@@ -76,8 +76,8 @@ namespace glerka_lib
 		auto conv_to_index = [=](uint8_t x, uint8_t y) { return x + y * 8; };
 
 		std::vector<chess_lib::Move> selected;
-		uint8_t x = is_white_side ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0));
-		uint8_t y = is_white_side ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0));
+		uint8_t x = static_cast<uint8_t>(is_white_side ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0)));
+		uint8_t y = static_cast<uint8_t>(is_white_side ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0)));
 		unsigned cur_coord = conv_to_index(x, y);
 		bool hold = false;
 		if (~m_ClickCoord)
@@ -109,7 +109,7 @@ namespace glerka_lib
 					}
 				}
 				glPushMatrix();
-				glTranslatef(is_white_vision ? x : 7 - x, is_white_vision ? 7 - y : y, 0.0f);
+				glTranslatef(float(is_white_vision ? x : 7 - x), float(is_white_vision ? 7 - y : y), 0.0f);
 				
 				RenderUnPushedSquare(board, conv_to_index(x, y), hold, light_check(conv_to_index(x, y)));
 				glPopMatrix();
@@ -275,13 +275,13 @@ namespace glerka_lib
 		{
 			auto x = ((!m_IsSwapedN) ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0)));
 			auto y = ((!m_IsSwapedN) ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0)));
-			return x + y * 8;
+			return static_cast<uint8_t>(x + y * 8.0);
 		}
 		else
 		{
 			auto x = (!m_CFGPlayAsBlackVision ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0)));
 			auto y = (!m_CFGPlayAsBlackVision ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0)));
-			return x + y * 8;
+			return static_cast<uint8_t>(x + y * 8.0);
 		}
 	}
 
