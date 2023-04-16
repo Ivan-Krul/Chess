@@ -15,7 +15,7 @@ int main(int argc, char const* argv[])
 
 	if (fin.is_open())
 	{
-		nlohmann::json json_file = nlohmann::json::parse(fen);
+		nlohmann::json json_file = nlohmann::json::parse(fin);
 		fen = json_file["board start position in FEN"];
 		fin.close();
 	}

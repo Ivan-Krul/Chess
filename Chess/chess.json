@@ -94,5 +94,5 @@
 	"need rotate after move" : true,
 	"vision as black" : false,
 	"light up when check" : true,
-	"board start position in FEN" : "rnbqkbnr/ppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"
+	"board start position in FEN" : "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq"
 }
