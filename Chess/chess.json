@@ -87,11 +87,11 @@
 		"delta" :
 		[
 			50,
-			0,
+			25,
 			-50
 		]
 	},
-	"need rotate after move" : false,
+	"need rotate after move" : true,
 	"vision as black" : false,
 	"light up when check" : true
 }

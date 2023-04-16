@@ -11,6 +11,8 @@ namespace glerka_lib
 		m_WidthPx = width;
 		m_HeightPx = height;
 		m_ClickCoord = -1;
+		Load();
+
 	}
 
 	void Renderer::RenderUnPushedSquare(const chess_lib::Board& board, const uint8_t index, const bool is_selected, const bool is_check)
@@ -44,7 +46,7 @@ namespace glerka_lib
 		glVertexPointer(2, GL_FLOAT, 0, ver_piece.data());
 		glEnableClientState(GL_VERTEX_ARRAY);
 			glColor3ub(col_piece.r, col_piece.g, col_piece.b);
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, ver_piece.size() / 2);
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, (GLsizei)ver_piece.size() / 2);
 		glDisableClientState(GL_VERTEX_ARRAY);
 	}
 
@@ -54,32 +56,42 @@ namespace glerka_lib
 		glTranslatef(-1.0f, -1.0f, 0.0f);
 		glScalef(2.0f / 8.0f, 2.0f / 8.0f, 1.0f);
 
-		auto selected = std::vector<chess_lib::Move>();
-		auto conv_to_index = [=](uint8_t x, uint8_t y) { return x + y * 8; };
+
+		// vision
+		bool is_white_vision = m_CFGNeedRotate
+			? (m_CFGPlayAsBlackVision 
+				? !is_white_side
+				: is_white_side)
+			: !m_CFGPlayAsBlackVision;
+		m_IsSwapedN = !is_white_vision;
+
 		bool is_check = false;
-
-		m_IsSwapedN = is_white_side;
-
-		if (m_CFGNeedRotate)
-			is_white_side = !m_CFGPlayAsBlackVision;
-
-		if (m_CFGLightCheck)
+		if(m_CFGLightCheck)
 		{
 			chess_lib::MoveGenerator mg;
 			is_check = mg.CanKingBeInCheck(board, !is_white_side);
 		}
 
+		// mouse
+		auto conv_to_index = [=](uint8_t x, uint8_t y) { return x + y * 8; };
+
+		std::vector<chess_lib::Move> selected;
 		uint8_t x = is_white_side ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0));
 		uint8_t y = is_white_side ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0));
 		unsigned cur_coord = conv_to_index(x, y);
-
-		auto hold = false;
+		bool hold = false;
 		if (~m_ClickCoord)
 		{
 			auto mc = chess_lib::MoveController::GetInstance();
 			selected = mc.Proposition(board, m_ClickCoord);
 		}
-		
+
+
+		// render loop
+		auto light_check = [=](uint8_t index) { 
+			bool is_king = board.GetBoard().at(index).type == chess_lib::PieceType::king;
+			return is_check && ((board.GetBoard().at(index).side == chess_lib::SideType::white) == is_white_side) && is_king;
+		};
 		for (uint8_t y = 0; y < 8; y++)
 		{
 			for (uint8_t x = 0; x < 8; x++)
@@ -97,8 +109,9 @@ namespace glerka_lib
 					}
 				}
 				glPushMatrix();
-				glTranslatef(is_white_side ? x : 7 - x, is_white_side ? 7 - y : y, 0.0f);
-				RenderUnPushedSquare(board, conv_to_index(x, y), hold, is_check);
+				glTranslatef(is_white_vision ? x : 7 - x, is_white_vision ? 7 - y : y, 0.0f);
+				
+				RenderUnPushedSquare(board, conv_to_index(x, y), hold, light_check(conv_to_index(x, y)));
 				glPopMatrix();
 			}
 		}
@@ -231,6 +244,7 @@ namespace glerka_lib
 
 		m_CFGNeedRotate = json_file["need rotate after move"];
 		m_CFGPlayAsBlackVision = json_file["vision as black"];
+		m_CFGLightCheck = json_file["light up when check"];
 
 		m_IsSwapedN = m_CFGPlayAsBlackVision;
 	}
@@ -259,8 +273,8 @@ namespace glerka_lib
 	{
 		if (m_CFGNeedRotate)
 		{
-			auto x = ((is_white && m_IsSwapedN) ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0)));
-			auto y = ((is_white && m_IsSwapedN) ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0)));
+			auto x = ((!m_IsSwapedN) ? std::floor(GetCurPosX() * 8.0) : (7 - std::floor(GetCurPosX() * 8.0)));
+			auto y = ((!m_IsSwapedN) ? std::floor(GetCurPosY() * 8.0) : (7 - std::floor(GetCurPosY() * 8.0)));
 			return x + y * 8;
 		}
 		else
